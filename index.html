@@ -1497,6 +1497,189 @@ if (__handleLoginOrig){
     }
     </script>
     
+
+  <!-- 🔔 إشعار التسجيل + صوت عربي + ربط Firebase (للجوال) -->
+  <style>
+    #sound-enable-btn{
+      position: fixed; bottom: 16px; left: 16px; z-index: 99999;
+      background: #d4af37; color:#201a00; font-weight:800; border:none;
+      border-radius: 999px; padding: 12px 16px; box-shadow:0 8px 20px rgba(212,175,55,.35);
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+  </style>
+  <button id="sound-enable-btn" style="display:none">🔊 تفعيل الصوت</button>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getDatabase, ref, onChildAdded } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+    // إعدادات Firebase (حسب مشروعك)
+    const firebaseConfig = {
+      apiKey: "AIzaSyC9Y_FW-ULjOD5F7U-WBV7aBMmVEyKAhfg",
+      authDomain: "billiard-system.firebaseapp.com",
+      databaseURL: "https://billiard-system-default-rtdb.firebaseio.com/",
+      projectId: "billiard-system",
+      storageBucket: "billiard-system.appspot.com",
+      messagingSenderId: "152994650455",
+      appId: "1:152994650455:web:1a68b2cd713b11a9cc612"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
+
+    // زر تفعيل الصوت للجوال
+    const soundBtn = document.getElementById('sound-enable-btn');
+    let soundEnabled = (localStorage.getItem('soundEnabled') === '1');
+    function checkMobileSoundGate(){
+      // على الجوال لازم ضغطة من المستخدم حتى يشتغل الصوت
+      const isTouch = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (isTouch && !soundEnabled){
+        soundBtn.style.display = 'inline-flex';
+      }
+    }
+    soundBtn?.addEventListener('click', () => {
+      soundEnabled = true;
+      localStorage.setItem('soundEnabled','1');
+      soundBtn.style.display = 'none';
+      try {
+        // نطق تجريبي قصير لتفعيل الصوت
+        const u = new SpeechSynthesisUtterance("تم تفعيل الصوت");
+        u.lang = "ar-SA"; u.rate=1; u.pitch=1;
+        speechSynthesis.speak(u);
+      } catch(e){}
+    });
+    checkMobileSoundGate();
+
+    // حفظ المفاتيح المعالجة حتى لا تتكرر الإشعارات
+    const processedKeySet = new Set(JSON.parse(localStorage.getItem("processedRegs") || "[]"));
+    function rememberProcessed(key){
+      processedKeySet.add(key);
+      localStorage.setItem("processedRegs", JSON.stringify([...processedKeySet]));
+    }
+
+    // نطق عربي (رجل) حسب المتاح في الجهاز
+    function speakArabic(text){
+      if (!soundEnabled) return;
+      try {
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = "ar-SA"; u.rate = 0.95; u.pitch = 0.9;
+        const voices = speechSynthesis.getVoices();
+        const arVoices = voices.filter(v => (v.lang||"").toLowerCase().startsWith("ar"));
+        const prefer = ["male","tarik","omar","maged","mehdi","majid"];
+        let picked = null;
+        if (arVoices.length){
+          picked = arVoices.find(v => prefer.some(p => (v.name||"").toLowerCase().includes(p))) || arVoices[0];
+        }
+        if (picked) u.voice = picked;
+        if (voices.length === 0){
+          speechSynthesis.onvoiceschanged = () => {
+            const vs = speechSynthesis.getVoices();
+            const arr = vs.filter(v => (v.lang||"").toLowerCase().startsWith("ar"));
+            u.voice = arr[0] || vs[0];
+            speechSynthesis.speak(u);
+          };
+        } else {
+          speechSynthesis.speak(u);
+        }
+      } catch(e){ console.warn("speech failed", e); }
+    }
+
+    // إشعار واجهة مدير (يستخدم addNotification إن وُجد)
+    function showManagerToast(title, message, type="success"){
+      if (typeof window.addNotification === "function"){
+        window.addNotification(title, message, type);
+        return;
+      }
+      // بديل بسيط إذا ماكو addNotification
+      let box = document.getElementById("manager-toast-box");
+      if (!box){
+        box = document.createElement("div");
+        box.id = "manager-toast-box";
+        box.style.position = "fixed";
+        box.style.left = "16px";
+        box.style.bottom = "16px";
+        box.style.zIndex = 99999;
+        document.body.appendChild(box);
+      }
+      const card = document.createElement("div");
+      card.style.background = "#161b22";
+      card.style.color = "#c9d1d9";
+      card.style.border = "1px solid #30363d";
+      card.style.borderRight = "4px solid #238636";
+      card.style.borderRadius = "10px";
+      card.style.padding = "12px 14px";
+      card.style.marginTop = "8px";
+      card.style.minWidth = "260px";
+      card.style.fontFamily = "Segoe UI, Tahoma, sans-serif";
+      card.innerHTML = `<div style="font-weight:800;color:#d4af37;margin-bottom:4px">${title}</div>
+                        <div style="font-size:12px;color:#9fb1c7">${message}</div>`;
+      box.appendChild(card);
+      setTimeout(()=> card.remove(), 8000);
+    }
+
+    // إدخال اللاعب مباشرة لقائمة النشطين إذا APP_DATA موجود
+    function addToActiveIfPossible(payload){
+      if (!window.APP_DATA) return;
+      const mode = payload.game === "playstation" ? "ps" : "billiard";
+      const noteParts = [];
+      if (payload.billiardKind) noteParts.push(payload.billiardKind === "normal" ? "عادي" : "كلارات");
+      if (payload.pairType)     noteParts.push(payload.pairType === "single" ? "مفرد" : "زوجي");
+      if (payload.gamesCount)   noteParts.push(`عدد الكيم: ${payload.gamesCount}`);
+      const notes = noteParts.join(" • ");
+
+      const player = {
+        id: Date.now(),
+        name: payload.name || "لاعب",
+        tableNumber: payload.tableNumber || "",
+        startTime: Date.now(),
+        customRate: window.APP_DATA[mode]?.hourlyRate || 5000,
+        notes: notes,
+        remaining: 0,
+        initialMinutes: 0,
+        overtimeAlerted: false,
+        timeFinishedAlerted: false
+      };
+
+      if (Array.isArray(window.APP_DATA[mode]?.activePlayers)){
+        window.APP_DATA[mode].activePlayers.push(player);
+      }
+      if (typeof window.showActivePlayers === "function"){
+        const prevMode = window.currentMode;
+        window.currentMode = mode;
+        window.showActivePlayers();
+        window.currentMode = prevMode;
+      }
+      // إشعار في مركز الإشعارات الأصلي إن وجد
+      if (typeof window.addNotification === "function"){
+        window.addNotification('تسجيل لاعب جديد', `${player.name} - ${mode === 'ps' ? 'بلاي ستيشن' : 'بلياردو'}`, 'success');
+      }
+    }
+
+    // الاستماع لإضافات جديدة
+    const regRef = ref(db, "registrations");
+    onChildAdded(regRef, (snap) => {
+      const key = snap.key;
+      if (processedKeySet.has(key)) return; // لا نكرر
+
+      const v = snap.val() || {};
+      const name = (v.name || "").trim();
+      const gameText = v.game === "playstation" ? "🎮 بلاي ستيشن" : "🎱 بلياردو";
+      const details = [];
+      if (v.billiardKind) details.push(v.billiardKind === "normal" ? "عادي" : "كلارات");
+      if (v.pairType)     details.push(v.pairType === "single" ? "مفرد" : "زوجي");
+      if (v.gamesCount)   details.push(`${v.gamesCount} كيم`);
+
+      const title = "تم تسجيل لاعب جديد";
+      const msg = `${name ? "الاسم: " + name + " • " : ""}${gameText}${details.length ? " • " + details.join(" • ") : ""}`;
+
+      showManagerToast(title, msg, "success");
+      speakArabic(`تم تسجيل لاعب جديد: ${name || "لاعب"}، ${v.game === "playstation" ? "بلاي ستيشن" : "بلياردو"}${v.gamesCount? "، " + v.gamesCount + " كيم" : ""}`);
+
+      addToActiveIfPossible(v);
+      rememberProcessed(key);
+    });
+  </script>
+
 </body>
 </html><!DOCTYPE html>
 <html lang="ar" dir="rtl">
