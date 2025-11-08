@@ -516,6 +516,33 @@
 
         // ملاحظة الطاولة في الهيدر
         document.title = `طاولة ${tableId.toUpperCase()} — نموذج التسجيل الذكي`;
+        // ===== إشعار عند التسجيل الناجح =====
+if (Notification.permission !== "granted") {
+  Notification.requestPermission();
+}
+
+function showNotification(player, game) {
+  if (Notification.permission === "granted") {
+    new Notification(`🎱 تم تسجيل اللاعب ${player} للعبة ${game}`, {
+      body: "تم حفظ البيانات وإرسالها للمدير بنجاح ✅",
+      icon: "https://cdn-icons-png.flaticon.com/512/3523/3523063.png"
+    });
+  }
+}
+
+// استدعاء الإشعار بعد التسجيل مباشرة
+btnRegister.addEventListener("click", () => {
+  const player = playerNameEl.value;
+  const game = gameTypeEl.value;
+  if (player && game) {
+    showNotification(player, game);
+  }
+});
+</script>
+</body>
+</html>
+
     </script>
 </body>
 </html>
+
