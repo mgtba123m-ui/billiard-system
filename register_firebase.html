@@ -1,387 +1,521 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎱 التسجيل الذكي - جامعة الأنبار</title>
-  <style>
-    :root{
-      --bg:#0d1117;
-      --panel:#161b22;
-      --gold:#d4af37;
-      --gold-2:#f0c14b;
-      --text:#c9d1d9;
-      --muted:#8b949e;
-      --green:#238636;
-      --blue:#1f6feb;
-      --red:#da3633;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: "Segoe UI", Tahoma, sans-serif;
-      background: radial-gradient(1200px 600px at 85% -10%, rgba(212,175,55,0.12), transparent 60%),
-                  radial-gradient(900px 600px at 10% -10%, rgba(31,111,235,0.08), transparent 60%),
-                  var(--bg);
-      color:var(--text);
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px;
-    }
-    .card{
-      width:min(1100px, 96vw);
-      background:linear-gradient(180deg, rgba(255,255,255,0.04), transparent 60%) , var(--panel);
-      border:1px solid rgba(255,255,255,0.06);
-      border-radius:16px;
-      box-shadow:0 20px 60px rgba(0,0,0,0.35);
-      overflow:hidden;
-    }
-    .header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:18px 22px;
-      background:linear-gradient(90deg, rgba(212,175,55,0.18), transparent);
-      border-bottom:1px solid rgba(212,175,55,0.25);
-    }
-    .brand{
-      display:flex;align-items:center;gap:14px;
-    }
-    .brand .logo{
-      width:54px;height:54px;display:grid;place-items:center;
-      border-radius:12px;
-      background:radial-gradient(circle at 30% 30%, var(--gold-2), var(--gold));
-      color:#141414;
-      font-size:28px;
-      border:1px solid rgba(0,0,0,0.25);
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.35);
-    }
-    .titles h1{margin:0;font-size:18px;color:var(--gold)}
-    .titles p{margin:2px 0 0;font-size:12px;color:var(--muted)}
-    .badge{
-      padding:8px 12px;border-radius:999px;
-      background:rgba(35,134,54,0.15);
-      color:#7ee787;
-      font-weight:700;font-size:12px;border:1px solid rgba(35,134,54,0.35);
-    }
-    .content{
-      display:grid;grid-template-columns: 1.1fr 0.9fr;gap:18px;
-      padding:22px;
-    }
-    .panel{
-      background:#0f141b;border:1px solid rgba(255,255,255,0.06);
-      border-radius:14px;padding:18px;
-    }
-    .panel h2{margin:0 0 14px;font-size:16px;color:var(--gold)}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    label{font-size:12px;color:var(--muted);margin-bottom:6px;display:block}
-    input,select{
-      width:100%;padding:12px 14px;border-radius:10px;border:1px solid #2f3742;
-      background:#0b0f14;color:var(--text);font-size:14px;outline:none;
-    }
-    input:focus,select:focus{border-color:var(--gold)}
-    .calc{
-      display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px
-    }
-    .priceBox{
-      background:linear-gradient(180deg, rgba(212,175,55,0.18), rgba(212,175,55,0.08));
-      border:1px solid rgba(212,175,55,0.35);
-      color:var(--gold);
-      border-radius:10px;padding:12px 14px;font-weight:700;text-align:center;
-    }
-    .hint{font-size:12px;color:var(--muted);margin-top:6px}
-    .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
-    .btn{
-      padding:12px 16px;border:none;border-radius:10px;cursor:pointer;font-weight:800;
-      background:linear-gradient(180deg, var(--gold-2), var(--gold));
-      color:#201a00;box-shadow:0 6px 20px rgba(212,175,55,0.25);
-    }
-    .btn:disabled{opacity:.6;cursor:not-allowed}
-    .ghost{background:#0d1117;color:var(--muted);border:1px solid #2a313a}
-    .summary{
-      background:#0b0f14;border:1px dashed rgba(255,255,255,0.15);
-      border-radius:12px;padding:14px;margin-top:12px;font-size:13px;color:#9fb1c7;
-    }
-    .footer{
-      padding:12px 18px;background:#0e1319;border-top:1px solid rgba(255,255,255,0.06);
-      display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
-      font-size:12px;color:var(--muted);
-    }
-    .credit{color:var(--gold)}
-    @media(max-width: 980px){
-      .content{grid-template-columns:1fr}
-    }
-  </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>نموذج التسجيل الذكي — صالة جامعة الأنبار</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #0b0f14;
+            --card: #0f141b;
+            --muted: #8ba3b4;
+            --accent: #00c2ff;
+            --accent-2: #ffd166;
+            --good: #2bd97a;
+            --warn: #ffae00;
+            --bad: #ff5c6b;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html, body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            background: radial-gradient(1200px 1200px at 70% -200px, #14202c 0%, #0b0f14 50%, #0b0f14 100%);
+            color: #eaf6ff;
+            font-family: "Tajawal",system-ui,Segoe UI,Arial,sans-serif;
+        }
+
+        .wrap {
+            max-width: 1120px;
+            margin: 32px auto;
+            padding: 16px
+        }
+
+        .header {
+            background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 14px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .title {
+            font-weight: 800;
+            font-size: 22px;
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+
+            .title .cap {
+                font-size: 26px
+            }
+
+        .sub {
+            color: var(--muted);
+            font-weight: 600
+        }
+
+        .grid {
+            display: grid;
+            gap: 16px;
+            margin-top: 16px
+        }
+
+        @media(min-width:920px) {
+            .grid {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.25)
+        }
+
+            .card h3 {
+                margin: 0 0 12px 0;
+                font-size: 18px
+            }
+
+        .hint {
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 10px;
+            align-items: center;
+            margin: 8px 0
+        }
+
+            .row.full {
+                grid-template-columns: 1fr
+            }
+
+        .input, select {
+            background: #0c1218;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 10px;
+            color: #eaf6ff;
+            padding: 12px;
+            font-size: 16px;
+            outline: none
+        }
+
+        select {
+            appearance: none
+        }
+
+        .badge {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 14px
+        }
+
+        .busy {
+            background: #201113;
+            border: 1px solid rgba(255,0,60,.35);
+            color: #ffd8de
+        }
+
+        .free {
+            background: #102418;
+            border: 1px solid rgba(0,255,120,.25);
+            color: #b8ffdc
+        }
+
+        .sum {
+            background: linear-gradient(180deg, #0f151c, #0a0e12);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 10px
+        }
+
+            .sum .big {
+                font-size: 28px;
+                font-weight: 900;
+                color: var(--accent-2)
+            }
+
+        .btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            flex-wrap: wrap
+        }
+
+        .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            transition: .2s
+        }
+
+            .btn:disabled {
+                opacity: .55;
+                cursor: not-allowed
+            }
+
+        .btn-main {
+            background: linear-gradient(90deg, #00c2ff, #35e3ff);
+            color: #001019
+        }
+
+        .btn-ghost {
+            background: #0c1218;
+            border: 1px solid rgba(255,255,255,.12);
+            color: #cfe9ff
+        }
+
+        .note {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--muted)
+        }
+
+        .footer {
+            margin-top: 18px;
+            color: #9ac7ff66;
+            text-align: center;
+            font-weight: 600
+        }
+
+        .gold {
+            color: #ffd166
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .bar {
+            height: 6px;
+            border-radius: 6px;
+            background: linear-gradient(90deg,#00c2ff,#62f2ff);
+            opacity: .25;
+            margin: 10px 0
+        }
+
+        .ok {
+            color: var(--good)
+        }
+
+        .warn {
+            color: var(--warn)
+        }
+
+        .bad {
+            color: var(--bad)
+        }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <div class="header">
-      <div class="brand">
-        <div class="logo">🎓</div>
-        <div class="titles">
-          <h1>جامعة الأنبار</h1>
-          <p>نموذج التسجيل الذكي | Billiard + PlayStation</p>
+    <div class="wrap">
+        <div class="header">
+            <div>
+                <div class="title"><span class="cap">🎓</span> جامعة الأنبار <span class="muted">| نموذج التسجيل الذكي</span></div>
+                <div class="sub">Billiard + PlayStation — Professional Edition • المطوّر: <span class="gold">Mujtaba Al-Dafa’i</span></div>
+            </div>
+            <div id="tableStatus" class="badge free">الحالة: متاحة</div>
         </div>
-      </div>
-      <span class="badge">نموذج تسجيل اللاعبين (QR)</span>
+
+        <div class="grid">
+            <!-- الأسعار السريعة -->
+            <div class="card">
+                <h3>أسعار سريعة</h3>
+                <div class="bar"></div>
+                <div class="hint">كل كيم = 10 دقائق (بلي/ستيشن)</div>
+                <div class="row"><div>بلياردو عادي</div><div>1000 د.ع</div></div>
+                <div class="row"><div>بلياردو زوجي</div><div>1500 د.ع</div></div>
+                <div class="row"><div>بليستيشن مفرد</div><div>1500 د.ع</div></div>
+                <div class="row"><div>بليستيشن زوجي</div><div>3000 د.ع</div></div>
+
+                <div class="sum">
+                    <div class="muted">التذكير الذكي</div>
+                    <div class="hint">إذا كانت هذه الطاولة مشغولة، سيظهر عدّاد وينمنع التكرار لغاية انتهاء الوقت، وبعدها ترجع متاحة تلقائياً.</div>
+                </div>
+            </div>
+
+            <!-- نموذج التسجيل -->
+            <div class="card">
+                <h3>بيانات اللاعب</h3>
+                <div class="bar"></div>
+                <div class="row">
+                    <div>اسم اللاعب</div>
+                    <div><input id="playerName" class="input" placeholder="اكتب اسمك هنا" /></div>
+                </div>
+                <div class="row">
+                    <div>نوع اللعبة 🎮</div>
+                    <div>
+                        <select id="gameType" class="input">
+                            <option value="billiard">بلياردو</option>
+                            <option value="ps">بلايستيشن</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>نوع الكِيم 🔖</div>
+                    <div>
+                        <select id="mode" class="input">
+                            <option value="single">مفرد</option>
+                            <option value="double">زوجي</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>عدد الكيمات #️⃣</div>
+                    <div>
+                        <select id="gamesCount" class="input">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="sum" id="sumBox">
+                    <div class="muted">المجموع النهائي</div>
+                    <div class="big" id="totalText">—</div>
+                    <div class="hint" id="durationText">—</div>
+                </div>
+
+                <div class="btns">
+                    <button id="btnRegister" class="btn btn-main">تسجيل</button>
+                    <button id="btnClear" class="btn btn-ghost">مسح الحقول</button>
+                </div>
+
+                <div class="note" id="stateNote">جاهز للتسجيل…</div>
+            </div>
+        </div>
+
+        <div class="footer">© 2025 • نظام التسجيل الذكي — جامعة الأنبار • المطوّر: <span class="gold">Mujtaba Al-Dafa’i</span></div>
     </div>
 
-    <div class="content">
-      <div class="panel">
-        <h2>📝 بيانات اللاعب</h2>
-        <div class="row">
-          <div>
-            <label>👤 اسم اللاعب</label>
-            <input id="playerName" type="text" placeholder="اكتب اسمك هنا" />
-          </div>
-          <div>
-            <label>🎮 نوع اللعبة</label>
-            <select id="gameType">
-              <option value="billiard">🎱 بلياردو</option>
-              <option value="playstation">🎮 بلاي ستيشن</option>
-            </select>
-          </div>
-        </div>
+    <!-- Firebase + منطق الطاولة -->
+    <script type="module">
+        // ================ إعداد Firebase (نفس مشروعك) ================
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, ref, onValue, onChildAdded, set, update, push, serverTimestamp, get } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-        <div class="row" id="billiardRow">
-          <div>
-            <label>🎯 نوع الكيم</label>
-            <select id="billiardKind">
-              <option value="normal">عادي</option>
-              <option value="clarat">كلارات</option>
-            </select>
-          </div>
-          <div>
-            <label>👥 مفرد / زوجي</label>
-            <select id="pairType">
-              <option value="single">مفرد</option>
-              <option value="double">زوجي</option>
-            </select>
-          </div>
-        </div>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC9Y_FW-ULjOD5F7U-WBV7aBMNvEyKAhfg",
+            authDomain: "billiard-system.firebaseapp.com",
+            databaseURL: "https://billiard-system-default-rtdb.firebaseio.com/",
+            projectId: "billiard-system",
+            storageBucket: "billiard-system.appspot.com",
+            messagingSenderId: "152994650455",
+            appId: "1:152994650455:web:1a668b2cd713b11a9cc612"
+        };
 
-        <div class="row" id="psRow" style="display:none">
-          <div>
-            <label>⏱️ مدة الكيم (10 دقائق لكل كيم)</label>
-            <input type="text" value="10 دقائق لكل كيم" disabled />
-          </div>
-          <div>
-            <label>💵 سعر الكيم</label>
-            <input type="text" value="1000 د.ع لكل كيم" disabled />
-          </div>
-        </div>
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
 
-        <div class="calc">
-          <div>
-            <label>🔢 عدد الكيم</label>
-            <input id="gamesCount" type="number" min="1" value="1" />
-            <div class="hint">كل كيم = 10 دقائق (بلاي ستيشن) • الأسعار حسب النوع (بلياردو)</div>
-          </div>
-          <div class="priceBox">
-            <div>💰 المجموع النهائي</div>
-            <div id="totalPrice" style="font-size:22px;margin-top:4px">1,000 د.ع</div>
-            <div id="totalTime" style="font-size:12px;color:#9fb27a;margin-top:2px">المدة: 10 دقائق</div>
-          </div>
-        </div>
+        // ================ ثابت زمن الكيم ================
+        const MINUTES_PER_GAME = 10; // حسب طلبك
+        const now = () => Date.now();
 
-        <div class="actions">
-          <button class="btn" id="submitBtn">✅ تسجيل</button>
-          <button class="btn ghost" id="resetBtn">↩ مسح الحقول</button>
-        </div>
+        // ================ مساعدات ================
+        const $ = (q) => document.querySelector(q);
+        const params = new URLSearchParams(location.search);
+        const tableId = (params.get("table") || "b1").toLowerCase(); // b1..b6
+        const role = (params.get("role") || "").toLowerCase();    // manager = ناطق
 
-        <div class="summary" id="resultMsg" style="display:none"></div>
-      </div>
+        // عناصر
+        const playerNameEl = $("#playerName");
+        const gameTypeEl = $("#gameType");
+        const modeEl = $("#mode");
+        const gamesEl = $("#gamesCount");
+        const totalText = $("#totalText");
+        const durationText = $("#durationText");
+        const btnRegister = $("#btnRegister");
+        const btnClear = $("#btnClear");
+        const tableBadge = $("#tableStatus");
+        const stateNote = $("#stateNote");
 
-      <div class="panel">
-        <h2>ℹ️ أسعار سريعة</h2>
-        <div class="summary">
-          <b>🎱 بلياردو</b><br />
-          • عادي مفرد: <b>1000 د.ع</b><br />
-          • عادي زوجي: <b>1500 د.ع</b><br />
-          • كلارات مفرد: <b>1500 د.ع</b><br />
-          • كلارات زوجي: <b>3000 د.ع</b><br />
-          <hr style="border-color: rgba(255,255,255,.08)">
-          <b>🎮 بلاي ستيشن</b><br />
-          • الكيم = <b>10 دقائق</b> • السعر = <b>1000 د.ع</b>
-        </div>
-
-        <div class="summary">
-          عند الضغط على “تسجيل” سيتم إرسال بياناتك مباشرةً للنظام، وإذا كنت مسجلاً بالفعل
-          سيتم إظهار رسالة تمنع التكرار حتى انتهاء جلستك الحالية.
-        </div>
-      </div>
-    </div>
-
-    <div class="footer">
-      <span>© 2025 جامعة الأنبار • نموذج التسجيل الذكي</span>
-      <span class="credit">تصميم وبرمجة: مجتبى الدفاعي</span>
-    </div>
-  </div>
-
-  <!-- Firebase & Logic -->
-  <script type="module">
-    // استيراد Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getDatabase, ref, push, set, get } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-
-    // إعدادات مشروعك
-    const firebaseConfig = {
-      apiKey: "AIzaSyC9Y_FW-ULjOD5F7U-WBV7aBMmVEyKAhfg",
-      authDomain: "billiard-system.firebaseapp.com",
-      databaseURL: "https://billiard-system-default-rtdb.firebaseio.com/",
-      projectId: "billiard-system",
-      storageBucket: "billiard-system.appspot.com",
-      messagingSenderId: "152994650455",
-      appId: "1:152994650455:web:1a68b2cd713b11a9cc612"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db  = getDatabase(app);
-
-    // عناصر الواجهة
-    const nameEl   = document.getElementById('playerName');
-    const gameEl   = document.getElementById('gameType');
-    const kindEl   = document.getElementById('billiardKind');
-    const pairEl   = document.getElementById('pairType');
-    const countEl  = document.getElementById('gamesCount');
-    const totalEl  = document.getElementById('totalPrice');
-    const timeEl   = document.getElementById('totalTime');
-    const msgEl    = document.getElementById('resultMsg');
-    const btnEl    = document.getElementById('submitBtn');
-
-    const billiardRow = document.getElementById('billiardRow');
-    const psRow       = document.getElementById('psRow');
-
-    // أسعار
-    function getPrice(game, kind, pair){
-      if(game === 'playstation') return 1000; // لكل كيم
-      // بلياردو
-      if(kind === 'normal' && pair === 'single') return 1000;
-      if(kind === 'normal' && pair === 'double') return 1500;
-      if(kind === 'clarat' && pair === 'single') return 1500;
-      if(kind === 'clarat' && pair === 'double') return 3000;
-      return 1000;
-    }
-
-    function updateTotals(){
-      const game = gameEl.value;
-      const kind = kindEl.value;
-      const pair = pairEl.value;
-      const count = Math.max(1, parseInt(countEl.value || '1', 10));
-      const pricePerGame = getPrice(game, kind, pair);
-      const total = pricePerGame * count;
-
-      totalEl.textContent = total.toLocaleString('ar-IQ') + ' د.ع';
-
-      // الوقت (بلاي ستيشن = 10 دقائق لكل كيم، بلياردو نعرض الوقت كعدد كيم فقط)
-      if(game === 'playstation'){
-        timeEl.textContent = 'المدة: ' + (count * 10) + ' دقيقة';
-      }else{
-        timeEl.textContent = 'عدد الكيم: ' + count;
-      }
-    }
-
-    gameEl.addEventListener('change', () => {
-      const isPS = gameEl.value === 'playstation';
-      billiardRow.style.display = isPS ? 'none' : 'grid';
-      psRow.style.display       = isPS ? 'grid' : 'none';
-      updateTotals();
-    });
-    [kindEl, pairEl, countEl].forEach(el => el.addEventListener('input', updateTotals));
-    updateTotals();
-
-    // منع التسجيل المكرر (اعتبار اللاعب مشغول)
-    async function isPlayerBusy(name){
-      const regRef = ref(db, 'registrations');
-      const snap = await get(regRef);
-      if(!snap.exists()) return false;
-      let busy = false;
-      snap.forEach(childSnap => {
-        const v = childSnap.val();
-        if(v && v.name && v.name.trim() === name.trim() && v.status === 'active'){
-          busy = true;
+        // ================ تسعير بسيط ================
+        function getPrice(gameType, mode) {
+            // بلياردو: عادي 1000 - زوجي 1500
+            // بلايستيشن: مفرد 1500 - زوجي 3000
+            if (gameType === "billiard") {
+                return mode === "double" ? 1500 : 1000;
+            } else {
+                return mode === "double" ? 3000 : 1500;
+            }
         }
-      });
-      return busy;
-    }
+        function refreshSummary() {
+            const gameType = gameTypeEl.value;
+            const mode = modeEl.value;
+            const count = +gamesEl.value;
+            const price = getPrice(gameType, mode);
+            const total = price * count;
+            const minutes = count * MINUTES_PER_GAME;
 
-    function sanitize(str){
-      return (str || '').toString().trim();
-    }
+            totalText.textContent = `${total.toLocaleString()} د.ع`;
+            durationText.textContent = `المدة الكلية: ${minutes} دقيقة • السعر/كيم: ${price.toLocaleString()} د.ع`;
+        }
+        ["change", "input"].forEach(ev => {
+            [gameTypeEl, modeEl, gamesEl].forEach(el => el.addEventListener(ev, refreshSummary));
+        });
+        refreshSummary();
 
-    // إرسال التسجيل
-    btnEl.addEventListener('click', async (e) => {
-      e.preventDefault();
-      msgEl.style.display = 'none';
-      msgEl.textContent = '';
+        // ================ مسارات قاعدة البيانات ================
+        const tableRef = ref(db, `tables/${tableId}`);              // حالة الطاولة (busy/busyUntil/…)
+        const regsRef = ref(db, `registrations/${tableId}`);       // سجل اللاعبين لهذه الطاولة
 
-      const name = sanitize(nameEl.value);
-      if(!name){ alert('يرجى إدخال اسم اللاعب'); return; }
+        // ================ عدّاد و قفل/فتح الطاولة ================
+        let busyUntil = 0;
+        let timer = null;
 
-      const game = gameEl.value;
-      const kind = kindEl.value;
-      const pair = pairEl.value;
-      const count = Math.max(1, parseInt(countEl.value || '1', 10));
-      const pricePerGame = getPrice(game, kind, pair);
-      const total = pricePerGame * count;
-      const start = Date.now();
+        function speak(msg) {
+            if (role !== "manager") return; // ما ينطق إلا لصفحة المدير
+            try {
+                const u = new SpeechSynthesisUtterance(msg);
+                u.lang = "ar"; u.rate = 1; u.pitch = 1; u.volume = 1;
+                speechSynthesis.cancel();
+                speechSynthesis.speak(u);
+            } catch { }
+        }
 
-      btnEl.disabled = true;
+        function setBusyUI(isBusy, untilTs) {
+            if (isBusy) {
+                tableBadge.classList.remove("free"); tableBadge.classList.add("busy");
+                tableBadge.textContent = "الحالة: مشغولة";
+                btnRegister.disabled = true;
+                countdown(untilTs);
+                stateNote.innerHTML = `<span class="warn">⏳ الطاولة مشغولة</span> — يرجى الانتظار حتى انتهاء الوقت.`;
+            } else {
+                tableBadge.classList.remove("busy"); tableBadge.classList.add("free");
+                tableBadge.textContent = "الحالة: متاحة";
+                btnRegister.disabled = false;
+                stateNote.innerHTML = `جاهز للتسجيل…`;
+                if (timer) { clearInterval(timer); timer = null; }
+            }
+        }
 
-      // تحقق إذا اللاعب مشغول
-      if(await isPlayerBusy(name)){
-        btnEl.disabled = false;
-        msgEl.style.display = 'block';
-        msgEl.style.borderColor = 'rgba(218,54,51,0.45)';
-        msgEl.style.color = '#f88';
-        msgEl.textContent = '❌ عذرًا، لديك جلسة قيد التشغيل حالياً. يرجى المحاولة لاحقًا.';
-        return;
-      }
+        function countdown(untilTs) {
+            if (timer) { clearInterval(timer); }
+            const tick = () => {
+                const remain = Math.max(0, untilTs - now());
+                if (remain <= 0) {
+                    clearInterval(timer); timer = null;
+                    // سيتبدّل إلى متاحة عبر مستمع onValue أدناه
+                    return;
+                }
+                const s = Math.ceil(remain / 1000);
+                const m = Math.floor(s / 60), ss = String(s % 60).padStart(2, "0");
+                stateNote.innerHTML = `⏳ مشغولة — يتاح بعد <b>${m}:${ss}</b>`;
+            };
+            tick();
+            timer = setInterval(tick, 1000);
+        }
 
-      // حفظ في Firebase
-      const regRef = ref(db, 'registrations');
-      const newRef = push(regRef);
-      const payload = {
-        name,
-        game,
-        billiardKind: game==='billiard' ? kind : null,
-        pairType: game==='billiard' ? pair : null,
-        gamesCount: count,
-        pricePerGame,
-        total,
-        startTime: new Date(start).toISOString(),
-        status: 'active', // يعتبر مشغول إلى أن ينهيه المدير
-        createdAt: start
-      };
+        // متابعة حالة الطاولة لحظيًا
+        onValue(tableRef, (snap) => {
+            const v = snap.val() || {};
+            busyUntil = v.busyUntil || 0;
+            const isBusy = busyUntil > now();
+            setBusyUI(isBusy, busyUntil);
 
-      await set(newRef, payload);
+            // نطق عند التحول لمتاحة (عند المدير)
+            if (!isBusy && role === "manager" && v.lastEndedAt) {
+                speak(`انتهت جلسة ${v.lastPlayerName ? "للاعب " + v.lastPlayerName : ""} على طاولة ${tableId.replace("b", "بي")}. الطاولة متاحة الآن.`);
+            }
+        });
 
-      // رسالة نجاح
-      msgEl.style.display = 'block';
-      msgEl.style.borderColor = 'rgba(35,134,54,0.45)';
-      msgEl.style.color = '#7ee787';
-      msgEl.innerHTML = '✅ مبروك! تم تسجيلك بنجاح.<br>الاسم: <b>'+name+'</b> • المجموع: <b>'+total.toLocaleString('ar-IQ')+' د.ع</b>';
+        // ================ تسجيل اللاعب ================
+        async function register() {
+            const playerName = (playerNameEl.value || "").trim();
+            const gameType = gameTypeEl.value;
+            const mode = modeEl.value;
+            const count = +gamesEl.value;
 
-      // تنظيف حقول الاسم فقط
-      nameEl.value='';
-      countEl.value='1';
-      updateTotals();
-      btnEl.disabled = false;
-    });
+            if (!playerName) { playerNameEl.focus(); return; }
 
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      nameEl.value='';
-      gameEl.value='billiard';
-      kindEl.value='normal';
-      pairEl.value='single';
-      countEl.value='1';
-      billiardRow.style.display='grid';
-      psRow.style.display='none';
-      updateTotals();
-      msgEl.style.display='none';
-    });
-  </script>
+            // منع أثناء الانشغال
+            const tblSnap = await get(tableRef);
+            const tv = tblSnap.val() || {};
+            if ((tv.busyUntil || 0) > now()) {
+                stateNote.innerHTML = `<span class="bad">⚠️ الطاولة مشغولة حاليًا</span>`;
+                return;
+            }
+
+            // حساب السعر والوقت
+            const price = getPrice(gameType, mode);
+            const total = price * count;
+            const minutes = count * MINUTES_PER_GAME;
+            const until = now() + minutes * 60 * 1000;
+
+            // حفظ سجل اللاعب
+            const entry = {
+                tableId, playerName, gameType, mode, count,
+                pricePerGame: price, total, minutes,
+                createdAt: serverTimestamp()
+            };
+            const key = push(regsRef).key;
+            await set(ref(db, `registrations/${tableId}/${key}`), entry);
+
+            // قفل الطاولة
+            await update(tableRef, {
+                busy: true,
+                busyUntil: until,
+                lastPlayerName: playerName,
+                lastStartedAt: serverTimestamp(),
+                lastEndedAt: null
+            });
+
+            stateNote.innerHTML = `<span class="ok">✅ تم التسجيل بنجاح</span> — المدة: ${minutes} دقيقة.`;
+        }
+
+        // تحرير الطاولة تلقائيًا عندما ينتهي الوقت (watcher خفيف)
+        setInterval(async () => {
+            const snap = await get(tableRef);
+            const v = snap.val() || {};
+            if ((v.busyUntil || 0) > 0 && v.busyUntil <= now()) {
+                await update(tableRef, {
+                    busy: false,
+                    busyUntil: 0,
+                    lastEndedAt: serverTimestamp()
+                });
+            }
+        }, 15_000); // كل 15 ثانية كفاية
+
+        // أزرار
+        btnRegister.addEventListener("click", register);
+        btnClear.addEventListener("click", () => {
+            playerNameEl.value = ""; gameTypeEl.value = "billiard"; modeEl.value = "single"; gamesEl.value = "1";
+            refreshSummary();
+        });
+
+        // ملاحظة الطاولة في الهيدر
+        document.title = `طاولة ${tableId.toUpperCase()} — نموذج التسجيل الذكي`;
+    </script>
 </body>
 </html>
