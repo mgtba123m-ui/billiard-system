@@ -2689,211 +2689,178 @@ if (__handleLoginOrig){
 <div id="login-screen">
 <div class="login-container fade-in">
 </div></div>
-<!-- 🎯 إشعارات Firebase (بنية دقيقة حسب قاعدة البيانات) -->
+<!-- 🔥 نظام الإشعارات المُحدَّث -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getDatabase, ref, onChildAdded } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
+// إعدادات Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyC9Y_FW-ULjOD5F7U-WBV7aBMNvEyKAhfg",
-  authDomain: "billiard-system.firebaseapp.com",
-  databaseURL: "https://billiard-system-default-rtdb.firebaseio.com/",
-  projectId: "billiard-system",
-  storageBucket: "billiard-system.appspot.com",
-  messagingSenderId: "152994650455",
-  appId: "1:152994650455:web:1a668b2cd713b11a9cc612"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// دالة الإشعار المرئي
-function showToast(title, text) {
-  let box = document.getElementById("manager-toast-box");
-  if (!box) {
-    box = document.createElement("div");
-    box.id = "manager-toast-box";
-    box.style.position = "fixed";
-    box.style.bottom = "20px";
-    box.style.left = "20px";
-    box.style.zIndex = "99999";
-    document.body.appendChild(box);
-  }
-  const card = document.createElement("div");
-  card.style.background = "#161b22";
-  card.style.color = "#c9d1d9";
-  card.style.border = "1px solid #30363d";
-  card.style.borderRight = "4px solid #238636";
-  card.style.borderRadius = "10px";
-  card.style.padding = "12px 14px";
-  card.style.marginTop = "8px";
-  card.style.minWidth = "300px";
-  card.style.fontFamily = "Segoe UI, Tahoma, sans-serif";
-  card.innerHTML = `<div style='font-weight:800;color:#d4af37;margin-bottom:4px'>${title}</div>
-                    <div style='font-size:13px;color:#9fb1c7'>${text}</div>`;
-  box.appendChild(card);
-  setTimeout(() => card.remove(), 8000);
-}
-
-// دالة نطق بالعربي
-function speakArabic(text) {
-  try {
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "ar-SA";
-    u.rate = 0.95;
-    u.pitch = 0.9;
-    speechSynthesis.speak(u);
-  } catch (e) { console.warn(e); }
-}
-
-// منع التكرار
-const processed = new Set(JSON.parse(localStorage.getItem("processedNotifications") || "[]"));
-function markProcessed(k) {
-  processed.add(k);
-  localStorage.setItem("processedNotifications", JSON.stringify([...processed]));
-}
-
-// مراقبة كل الطاولات
-const tablesRef = ref(db, "registrations");
-onChildAdded(tablesRef, (tableSnap) => {
-  const tableId = tableSnap.key;
-  const playersRef = ref(db, `registrations/${tableId}`);
-  onChildAdded(playersRef, (snap) => {
-    const key = snap.key;
-    if (processed.has(key)) return;
-    const d = snap.val();
-    if (!d) return;
-
-    const name = d.playerName || "غير معروف";
-    const mins = d.minutes || 0;
-    const total = d.total || 0;
-    const table = d.tableId || tableId || "—";
-    const mode = d.mode === "double" ? "زوجي" : "مفرد";
-    const game = d.gameType === "billiard" ? "🎱 بلياردو" : "🎮 كلرات";
-
-    const msg = `اللاعب: ${name} • ${game} • ${mode} • ${mins} دقيقة • ${total} د.ع • طاولة ${table}`;
-    showToast("🎯 تسجيل لاعب جديد", msg);
-    speakArabic(`تم تسجيل اللاعب ${name} في طاولة ${table} لمدة ${mins} دقيقة`);
-    markProcessed(key);
-  });
-});
-</script>
-
-<!-- 🔔 إشعار تسجيل لاعب جديد (للإدارة) - يظهر بمنتصف الشاشة مع صوت عربي -->
-<script type="module">
-import { initializeApp, getApp, getApps } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getDatabase, ref, onChildAdded } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-
-// ملاحظة: لن نغيّر أي شيء من واجهتك. هذا السكربت فقط يعرض إشعار بمنتصف الشاشة عند تسجيل لاعب جديد.
-const firebaseConfig = {
-  apiKey: "AIzaSyC9Y_FW-ULjOD5F7U-WBV7aBMMvEyKAhfg",
+  apiKey: "AIzaSyC9Y_FW-ULjOD5F7U-WBV7aBMmVEyKAhfg",
   authDomain: "billiard-system.firebaseapp.com",
   databaseURL: "https://billiard-system-default-rtdb.firebaseio.com/",
   projectId: "billiard-system",
   storageBucket: "billiard-system.firebasestorage.app",
   messagingSenderId: "152994650455",
-  appId: "1:152994650455:web:1a680b2cd713b11a9cc612",
-  measurementId: "G-MH7K2ZJWNR"
+  appId: "1:152994650455:web:1a680b2cd713b11a9cc612"
 };
 
-// تهيئة آمنة (بدون تكرار)
-let app;
-if (!getApps().length) app = initializeApp(firebaseConfig);
-else app = getApp();
+const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// منع تكرار نفس الإشعار لنفس السجل
-const _seen = new Set(JSON.parse(localStorage.getItem("__seen_regs") || "[]"));
-function _mark(k){ _seen.add(k); localStorage.setItem("__seen_regs", JSON.stringify([..._seen])); }
+// تخزين المفاتيح المعالجة
+const processedKeys = new Set(
+  JSON.parse(localStorage.getItem("processedRegistrations") || "[]")
+);
 
-// إشعار بمنتصف الشاشة
-function showCenterToast(lines) {
-  // حاوية
-  let overlay = document.getElementById("rp-center-toast");
+function markAsProcessed(key) {
+  processedKeys.add(key);
+  localStorage.setItem("processedRegistrations", JSON.stringify([...processedKeys]));
+}
+
+// إظهار الإشعار المركزي
+function showCenterNotification(data) {
+  let overlay = document.getElementById("center-notification-overlay");
   if (!overlay) {
     overlay = document.createElement("div");
-    overlay.id = "rp-center-toast";
-    overlay.style.position = "fixed";
-    overlay.style.inset = "0";
-    overlay.style.display = "flex";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
-    overlay.style.zIndex = "999999";
-    overlay.style.pointerEvents = "none";
+    overlay.id = "center-notification-overlay";
+    overlay.style.cssText = `
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999999;
+      pointer-events: none;
+    `;
     document.body.appendChild(overlay);
   }
+
   const card = document.createElement("div");
-  card.style.background = "rgba(10,10,14,0.9)";
-  card.style.backdropFilter = "blur(6px)";
-  card.style.border = "1px solid #2a2f3a";
-  card.style.borderTop = "3px solid #d4af37";
-  card.style.color = "#e6edf3";
-  card.style.padding = "18px 20px";
-  card.style.borderRadius = "16px";
-  card.style.fontFamily = "Tajawal, Segoe UI, Tahoma, sans-serif";
-  card.style.minWidth = "320px";
-  card.style.maxWidth = "92vw";
-  card.style.textAlign = "right";
-  card.style.boxShadow = "0 10px 30px rgba(0,0,0,0.45)";
-  card.style.pointerEvents = "auto";
+  card.style.cssText = `
+    background: rgba(10,10,14,0.95);
+    backdrop-filter: blur(8px);
+    border: 2px solid #d4af37;
+    border-radius: 16px;
+    padding: 24px 28px;
+    max-width: 400px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    pointer-events: auto;
+    animation: slideIn 0.3s ease;
+  `;
+
+  const gameIcon = data.gameType === "billiard" ? "🎱" : "🎮";
+  const gameName = data.gameType === "billiard" ? "بلياردو" : "بلايستيشن";
+  const modeName = data.mode === "double" ? "زوجي" : "مفرد";
+
   card.innerHTML = `
-    <div style="font-weight:800;font-size:18px;margin-bottom:8px">🎱 تم تسجيل لاعب جديد</div>
-    <div style="font-size:14px;line-height:1.7">
-      ${lines.map(l => `<div>${l}</div>`).join("")}
+    <div style="text-align:center;margin-bottom:15px;font-size:40px">${gameIcon}</div>
+    <div style="font-weight:800;font-size:20px;color:#d4af37;margin-bottom:12px;text-align:center">
+      تم تسجيل لاعب جديد
+    </div>
+    <div style="background:#161b22;padding:15px;border-radius:8px;line-height:1.8;color:#c9d1d9">
+      <div style="margin:6px 0"><strong style="color:#58a6ff">الاسم:</strong> ${data.playerName || "—"}</div>
+      <div style="margin:6px 0"><strong style="color:#58a6ff">اللعبة:</strong> ${gameName}</div>
+      <div style="margin:6px 0"><strong style="color:#58a6ff">النمط:</strong> ${modeName}</div>
+      <div style="margin:6px 0"><strong style="color:#58a6ff">المدة:</strong> ${data.minutes || 0} دقيقة</div>
+      <div style="margin:6px 0"><strong style="color:#58a6ff">السعر:</strong> ${(data.total || 0).toLocaleString()} د.ع</div>
+      <div style="margin:6px 0"><strong style="color:#58a6ff">الطاولة:</strong> ${data.tableId || "—"}</div>
     </div>
   `;
+
   overlay.appendChild(card);
-  setTimeout(()=> card.remove(), 7000);
+  setTimeout(() => card.remove(), 8000);
 }
 
-// نطق بالعربية
-function speak(text){
+// نطق صوتي بالعربية
+function speakArabic(text) {
+  if (localStorage.getItem("notif_sound") === "off") return;
   try {
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "ar-SA";
-    u.rate = 0.98;
-    u.pitch = 1.0;
-    speechSynthesis.speak(u);
-  } catch(e){}
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "ar-SA";
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+    speechSynthesis.speak(utterance);
+  } catch(e) { 
+    console.warn("⚠️ فشل النطق الصوتي:", e); 
+  }
 }
 
-// تفعيل فقط للمسؤول: إذا عندك نظام صلاحيات، غيّر الشرط حسب نظامك.
-// حالياً: نفعّله عندما يكون عنوان الصفحة يحتوي على "المدير" أو إذا تم تعيين localStorage.admin='1'.
-const isAdmin = (localStorage.getItem("admin")==="1") || /مدير|manager|admin/i.test(document.title);
-if (isAdmin) {
-  const regs = ref(db, "registrations");
-  onChildAdded(regs, (tableSnap) => {
-    const tableId = tableSnap.key;
-    const listRef = ref(db, `registrations/${tableId}`);
-    onChildAdded(listRef, (snap) => {
-      const key = `${tableId}/${snap.key}`;
-      if (_seen.has(key)) return;
-      const d = snap.val() || {};
-      // الحقول كما في قاعدتك
-      const name = d.playerName || "غير معروف";
-      const game = d.gameType === "billiard" ? "بلياردو" : "كلرات";
-      const mode = d.mode === "double" ? "زوجي" : "مفرد";
-      const mins = Number(d.minutes||0);
-      const total = Number(d.total||0).toLocaleString();
-      const table = (d.tableId || tableId || "").toString().toUpperCase();
+// إضافة للإشعارات الداخلية
+function addToSystemNotifications(data) {
+  if (typeof window.addNotification === "function") {
+    const gameIcon = data.gameType === "billiard" ? "🎱" : "🎮";
+    const gameName = data.gameType === "billiard" ? "بلياردو" : "بلايستيشن";
+    window.addNotification(
+      `${gameIcon} تسجيل جديد`,
+      `${data.playerName || "لاعب"} - ${gameName} - ${data.minutes || 0} دقيقة`,
+      "success"
+    );
+  }
+}
 
-      // عرض
-      const lines = [
-        `الاسم: ${name}`,
-        `اللعبة: ${game}`,
-        `النمط: ${mode}`,
-        `المدة: ${mins} دقيقة`,
-        `السعر: ${total} د.ع`,
-        `الطاولة: ${table||"—"}`
-      ];
-      showCenterToast(lines);
-      speak(`تم تسجيل اللاعب ${name} في طاولة ${table||"غير معروفة"} لمدة ${mins} دقيقة`);
-      _mark(key);
-    });
+// مراقبة التسجيلات
+console.log("🔥 بدء مراقبة تسجيلات Firebase...");
+
+const registrationsRef = ref(db, "registrations");
+
+// مراقبة كل طاولة
+onChildAdded(registrationsRef, (tableSnapshot) => {
+  const tableId = tableSnapshot.key;
+  console.log(`📋 مراقبة الطاولة: ${tableId}`);
+  
+  const tablePlayersRef = ref(db, `registrations/${tableId}`);
+  
+  // مراقبة اللاعبين في كل طاولة
+  onChildAdded(tablePlayersRef, (playerSnapshot) => {
+    const playerId = playerSnapshot.key;
+    const fullKey = `${tableId}/${playerId}`;
+    
+    // تجنب التكرار
+    if (processedKeys.has(fullKey)) {
+      console.log(`⏭️ تم تخطي (معالج مسبقاً): ${fullKey}`);
+      return;
+    }
+
+    const data = playerSnapshot.val();
+    if (!data) {
+      console.warn("⚠️ بيانات فارغة:", fullKey);
+      return;
+    }
+
+    console.log("✅ تسجيل جديد:", data);
+
+    // عرض الإشعار
+    showCenterNotification(data);
+    
+    // نطق صوتي
+    const gameName = data.gameType === "billiard" ? "بلياردو" : "بلايستيشن";
+    speakArabic(
+      `تم تسجيل اللاعب ${data.playerName || "غير معروف"} في ${gameName} لمدة ${data.minutes || 0} دقيقة`
+    );
+    
+    // إضافة للإشعارات الداخلية
+    addToSystemNotifications(data);
+    
+    // تمييز كمعالج
+    markAsProcessed(fullKey);
   });
-} else {
-  // إذا حاب تفعّلها مؤقتاً بدون نظام صلاحيات: شغّلها يدوياً
-  console.log("تنبيه: إشعار الإدارة متوقف. لتفعيله مؤقتاً ضع: localStorage.admin = '1' ثم أعد تحميل الصفحة.");
+});
+
+console.log("✅ نظام الإشعارات جاهز ويعمل!");
+</script>
+
+<style>
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
+</style>
 </script>
 </body></html>
