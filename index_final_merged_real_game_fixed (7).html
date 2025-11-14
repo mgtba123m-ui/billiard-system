@@ -1,0 +1,2814 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎱🎮 نظام إدارة صالة البلياردو والبلايستيشن - جامعة الأنبار</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0d1117;
+            color: #c9d1d9;
+            overflow-x: hidden;
+        }
+
+        /* شاشة التحميل */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0d1117;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .splash-content {
+            text-align: center;
+            background: #161b22;
+            padding: 60px;
+            border-radius: 15px;
+            border-top: 5px solid #d4af37;
+        }
+
+        .splash-icon {
+            font-size: 70px;
+            margin-bottom: 20px;
+            color: #1a472a;
+        }
+
+        .splash-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1a472a;
+            margin-bottom: 10px;
+        }
+
+        .splash-subtitle {
+            font-size: 14px;
+            font-style: italic;
+            color: #2d5016;
+            margin-bottom: 30px;
+        }
+
+        .splash-system-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #d4af37;
+            margin-bottom: 10px;
+        }
+
+        .splash-system-subtitle {
+            font-size: 12px;
+            font-style: italic;
+            color: #58a6ff;
+            margin-bottom: 40px;
+        }
+
+        .progress-container {
+            width: 400px;
+            height: 8px;
+            background: #0d1117;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #d4af37;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .splash-version {
+            font-size: 9px;
+            color: #6e7681;
+            margin-top: 15px;
+        }
+
+        .splash-developer {
+            font-size: 10px;
+            font-weight: bold;
+            color: #d4af37;
+            margin-top: 5px;
+        }
+
+        /* شاشة تسجيل الدخول */
+        #login-screen {
+            display: none;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .login-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            font-size: 60px;
+            color: #1a472a;
+            margin-bottom: 15px;
+        }
+
+        .logo-title-ar {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1a472a;
+            margin-bottom: 10px;
+        }
+
+        .logo-title-en {
+            font-size: 18px;
+            font-style: italic;
+            color: #2d5016;
+        }
+
+        .login-card {
+            background: #161b22;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 30px auto;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-accent {
+            height: 4px;
+            background: #1a472a;
+        }
+
+        .card-content {
+            padding: 40px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #c9d1d9;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            font-style: italic;
+            color: #58a6ff;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .card-location {
+            font-size: 16px;
+            color: #8b949e;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #c9d1d9;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-wrapper {
+            background: #0d1117;
+            border: 2px solid #30363d;
+            border-radius: 6px;
+            padding: 12px 14px;
+            transition: border-color 0.3s;
+        }
+
+            .input-wrapper:focus-within {
+                border-color: #1a472a;
+            }
+
+        .input-field {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #c9d1d9;
+            font-size: 13px;
+            outline: none;
+        }
+
+            .input-field::placeholder {
+                color: #6e7681;
+            }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: #1a472a;
+            color: #ffffff;
+        }
+
+            .btn-primary:hover {
+                background: #2d5d3d;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(26, 71, 42, 0.4);
+            }
+
+        .footer-info {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .footer-copyright {
+            font-size: 9px;
+            font-weight: bold;
+            color: #d4af37;
+            margin-bottom: 5px;
+        }
+
+        .footer-version {
+            font-size: 8px;
+            color: #484f58;
+        }
+
+        /* الواجهة الرئيسية */
+        #main-interface {
+            display: none;
+        }
+
+        .header {
+            background: #161b22;
+            padding: 20px 40px;
+            border-bottom: 5px solid #1a472a;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-logo-icon {
+            font-size: 32px;
+            color: #1a472a;
+        }
+
+        .header-logo-games {
+            font-size: 20px;
+            color: #d4af37;
+            margin-top: 5px;
+        }
+
+        .header-text h1 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1a472a;
+            margin-bottom: 5px;
+        }
+
+        .header-text h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d4af37;
+            margin-bottom: 5px;
+        }
+
+        .header-text p {
+            font-size: 9px;
+            color: #8b949e;
+        }
+
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .user-info {
+            background: #0d1117;
+            padding: 15px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-details {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 12px;
+            font-weight: bold;
+            color: #c9d1d9;
+        }
+
+        .user-role {
+            font-size: 9px;
+            color: #3fb950;
+            margin-top: 3px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .time-display {
+            font-size: 11px;
+            font-weight: bold;
+            color: #58a6ff;
+            padding: 8px 15px;
+            background: #161b22;
+            border-radius: 6px;
+        }
+
+        .btn-notification {
+            background: #1f6feb;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+            .btn-notification:hover {
+                background: #388bfd;
+            }
+
+        .btn-logout {
+            background: #da3633;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+            .btn-logout:hover {
+                background: #f85149;
+            }
+
+        /* لوحة التحكم الرئيسية */
+        .dashboard {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 40px;
+        }
+
+        .dashboard-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #c9d1d9;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .dashboard-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .section-card {
+            background: linear-gradient(135deg, #2d5016 0%, #1a472a 100%);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+            .section-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 8px 32px rgba(45, 80, 22, 0.4);
+            }
+
+            .section-card.ps {
+                background: linear-gradient(135deg, #1f6feb 0%, #1a5bd8 100%);
+            }
+
+                .section-card.ps:hover {
+                    box-shadow: 0 8px 32px rgba(31, 111, 235, 0.4);
+                }
+
+        .section-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .section-description {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .action-btn {
+            background: #1a472a;
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+            .action-btn:hover {
+                background: #2d5d3d;
+                transform: translateY(-2px);
+            }
+
+            .action-btn.purple {
+                background: #8957e5;
+            }
+
+                .action-btn.purple:hover {
+                    background: #a475f9;
+                }
+
+        /* لوحة القسم */
+        .section-dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #161b22;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card-accent {
+            height: 5px;
+        }
+
+        .stat-card-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #c9d1d9;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: #8b949e;
+        }
+
+        .stat-badge {
+            display: inline-block;
+            font-size: 8px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+
+        .section-title-main {
+            font-size: 22px;
+            font-weight: bold;
+            color: #c9d1d9;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .action-button {
+            background: #238636;
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+            .action-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(35, 134, 54, 0.4);
+            }
+
+            .action-button.blue {
+                background: #1f6feb;
+            }
+
+                .action-button.blue:hover {
+                    box-shadow: 0 4px 12px rgba(31, 111, 235, 0.4);
+                }
+
+            .action-button.purple {
+                background: #8957e5;
+            }
+
+                .action-button.purple:hover {
+                    box-shadow: 0 4px 12px rgba(137, 87, 229, 0.4);
+                }
+
+            .action-button.gold {
+                background: #d4af37;
+            }
+
+                .action-button.gold:hover {
+                    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+                }
+
+            .action-button.red {
+                background: #da3633;
+            }
+
+                .action-button.red:hover {
+                    box-shadow: 0 4px 12px rgba(218, 54, 51, 0.4);
+                }
+
+            .action-button.gray {
+                background: #6e7681;
+            }
+
+                .action-button.gray:hover {
+                    box-shadow: 0 4px 12px rgba(110, 118, 129, 0.4);
+                }
+
+        /* النوافذ المنبثقة */
+        .modal, .notifications-modal, .search-modal, .edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content, .notifications-container, .search-container, .edit-container {
+            background: #161b22;
+            max-width: 600px;
+            margin: 50px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header, .notifications-header, .search-header, .edit-header {
+            background: #238636;
+            padding: 20px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .notifications-header {
+            background: #1f6feb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-header, .edit-header {
+            background: #1a472a;
+        }
+
+        .edit-header {
+            background: #1f6feb;
+        }
+
+        .notifications-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+        }
+
+        .modal-body, .notifications-body, .search-body, .edit-body {
+            padding: 30px;
+        }
+
+        .notifications-body {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #c9d1d9;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-input, .form-select, .search-input {
+            width: 100%;
+            padding: 12px;
+            background: #0d1117;
+            border: 2px solid #30363d;
+            border-radius: 6px;
+            color: #c9d1d9;
+            font-size: 13px;
+            transition: border-color 0.3s;
+        }
+
+            .form-input:focus, .search-input:focus {
+                outline: none;
+                border-color: #238636;
+            }
+
+        .form-select {
+            cursor: pointer;
+        }
+
+        .info-box, .current-info {
+            background: #0d1117;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+            .info-box p, .current-info p {
+                font-size: 11px;
+                color: #58a6ff;
+                margin: 5px 0;
+            }
+
+        .modal-footer {
+            padding: 20px 30px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-modal, .btn-primary-custom, .btn-secondary-custom {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-save, .btn-primary-custom {
+            background: #238636;
+            color: white;
+        }
+
+            .btn-save:hover, .btn-primary-custom:hover {
+                background: #2ea043;
+            }
+
+        .btn-cancel, .btn-secondary-custom {
+            background: #6e7681;
+            color: white;
+        }
+
+            .btn-cancel:hover, .btn-secondary-custom:hover {
+                background: #8b949e;
+            }
+
+        /* بطاقات اللاعبين */
+        .players-container, .search-results {
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .player-card, .notification-item, .search-result-item {
+            background: #161b22;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification-item, .search-result-item {
+            background: #0d1117;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-right: 4px solid #6e7681;
+            transition: all 0.3s;
+        }
+
+            .notification-item:hover, .search-result-item:hover {
+                transform: translateX(-5px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            }
+
+            .notification-item.success {
+                border-right-color: #238636;
+            }
+
+            .notification-item.warning {
+                border-right-color: #d4af37;
+            }
+
+            .notification-item.error {
+                border-right-color: #da3633;
+            }
+
+            .notification-item.info {
+                border-right-color: #1f6feb;
+            }
+
+        .search-result-item {
+            border-right-color: #8957e5;
+        }
+
+        .player-card-stripe {
+            height: 5px;
+        }
+
+        .player-card-content {
+            padding: 20px;
+        }
+
+        .player-header, .search-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .search-result-header {
+            margin-bottom: 8px;
+        }
+
+        .player-info h3, .search-result-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d4af37;
+            margin-bottom: 5px;
+        }
+
+        .search-result-name {
+            font-size: 15px;
+        }
+
+        .player-table-badge {
+            display: inline-block;
+            background: #238636;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .player-notes {
+            font-size: 10px;
+            color: #8b949e;
+            margin-top: 5px;
+        }
+
+        .player-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-edit {
+            background: #1f6feb;
+        }
+
+            .btn-edit:hover {
+                background: #388bfd;
+            }
+
+        .btn-end {
+            background: #da3633;
+        }
+
+            .btn-end:hover {
+                background: #f85149;
+            }
+
+        .player-stats {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .player-stat-box {
+            background: #0d1117;
+            padding: 12px;
+            border-radius: 6px;
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .player-stat-label {
+            font-size: 9px;
+            color: #8b949e;
+            margin-bottom: 5px;
+        }
+
+        .player-stat-value {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .countdown-box {
+            background: linear-gradient(135deg, #d4af37 0%, #f0c14b 100%);
+            color: #000;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        .countdown-expired {
+            background: linear-gradient(135deg, #da3633 0%, #f85149 100%);
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .notification-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #c9d1d9;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-size: 10px;
+            color: #8b949e;
+            margin-bottom: 5px;
+        }
+
+        .notification-time, .search-result-details {
+            font-size: 8px;
+            color: #6e7681;
+        }
+
+        .search-result-details {
+            font-size: 9px;
+        }
+
+        .search-result-cost {
+            font-size: 16px;
+            font-weight: bold;
+            color: #3fb950;
+        }
+
+        /* حالات فارغة */
+        .empty-state, .empty-notifications, .search-no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: #161b22;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .empty-notifications {
+            padding: 50px 20px;
+            background: transparent;
+        }
+
+        .search-no-results {
+            padding: 30px;
+            background: transparent;
+            color: #8b949e;
+        }
+
+        .empty-icon, .empty-notifications-icon {
+            font-size: 58px;
+            color: #30363d;
+            margin-bottom: 20px;
+        }
+
+        .empty-notifications-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .empty-text, .empty-notifications-text {
+            font-size: 17px;
+            color: #8b949e;
+        }
+
+        .empty-notifications-text {
+            font-size: 16px;
+        }
+
+        /* Scrollbar */
+        .players-container::-webkit-scrollbar,
+        .notifications-body::-webkit-scrollbar,
+        .search-results::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .players-container::-webkit-scrollbar-track,
+        .notifications-body::-webkit-scrollbar-track,
+        .search-results::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+
+        .players-container::-webkit-scrollbar-thumb,
+        .notifications-body::-webkit-scrollbar-thumb,
+        .search-results::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 4px;
+        }
+
+            .players-container::-webkit-scrollbar-thumb:hover,
+            .notifications-body::-webkit-scrollbar-thumb:hover,
+            .search-results::-webkit-scrollbar-thumb:hover {
+                background: #484f58;
+            }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .action-buttons, .dashboard-sections {
+                grid-template-columns: 1fr;
+            }
+
+            .player-stats {
+                flex-direction: column;
+            }
+
+            .splash-content {
+                padding: 40px 30px;
+            }
+
+            .progress-container {
+                width: 300px;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .search-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* Firebase Toast Styles */
+        .firebase-toast-red {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: #fff;
+            font-weight: 800;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(220, 38, 38, 0.5);
+            z-index: 999999;
+            min-width: 300px;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .firebase-toast-red.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .firebase-toast-red .toast-title {
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .firebase-toast-red .toast-body {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة التحميل -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-icon">🎓</div>
+            <div class="splash-title">جامعة الأنبار</div>
+            <div class="splash-subtitle">Al-Anbar University</div>
+            <div class="splash-system-title">🎱🎮 نظام إدارة الصالة المزدوج</div>
+            <div class="splash-system-subtitle">Billiard + PlayStation Management System</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress"></div>
+            </div>
+            <div class="splash-version">Version 3.0 Pro • 2024</div>
+            <div class="splash-developer">تطوير: مجتبى الدفاعي</div>
+        </div>
+    </div>
+
+    <!-- شاشة تسجيل الدخول -->
+    <div id="login-screen">
+        <div class="login-container fade-in">
+            <div class="logo-section">
+                <div class="logo-icon">🎓</div>
+                <div class="logo-title-ar">جامعة الأنبار</div>
+                <div class="logo-title-en">Al-Anbar University</div>
+            </div>
+
+            <div class="login-card">
+                <div class="card-accent"></div>
+                <div class="card-content">
+                    <h2 class="card-title">🎱🎮 نظام إدارة البلياردو والبلايستيشن</h2>
+                    <p class="card-subtitle">Professional Edition</p>
+                    <p class="card-location">الأقسام الداخلية - جامعة الأنبار</p>
+
+                    <form id="login-form" onsubmit="handleLogin(event)">
+                        <div class="input-group">
+                            <label class="input-label">👤 اسم المستخدم</label>
+                            <div class="input-wrapper">
+                                <input type="text" class="input-field" id="username" placeholder="أدخل اسم المستخدم" required>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">🔑 كلمة المرور</label>
+                            <div class="input-wrapper">
+                                <input type="password" class="input-field" id="password" placeholder="أدخل كلمة المرور" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">🔓 تسجيل الدخول</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-info">
+                <div class="footer-copyright">© 2024 جامعة الأنبار | تطوير: مجتبى الدفاعي</div>
+                <div class="footer-version">Professional Edition • Version 3.0 Pro</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الواجهة الرئيسية -->
+    <div id="main-interface">
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="header-logo">
+                        <div class="header-logo-icon">🎓</div>
+                        <div class="header-logo-games">🎱🎮</div>
+                    </div>
+                    <div class="header-text">
+                        <h1>جامعة الأنبار - الأقسام الداخلية</h1>
+                        <h2>نظام إدارة البلياردو والبلايستيشن</h2>
+                        <p>Al-Anbar University • Billiard & PlayStation Management System</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <div class="user-details">
+                            <div class="user-name" id="current-user-name">👤 المدير</div>
+                            <div class="user-role">مدير • نشط الآن</div>
+                        </div>
+                        <button class="btn-notification" onclick="showNotifications()">🔔</button>
+                    </div>
+                    <div class="header-actions">
+                        <div class="time-display" id="time-display">00:00:00</div>
+                        <button class="btn-logout" onclick="handleLogout()">🚪 خروج</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="dashboard" id="main-dashboard">
+            <h1 class="dashboard-title">اختر القسم الذي تريد إدارته:</h1>
+            
+            <div class="dashboard-sections">
+                <div class="section-card" onclick="openBilliardDashboard()">
+                    <div class="section-icon">🎱</div>
+                    <h2 class="section-title">صالة البلياردو</h2>
+                    <p class="section-description">إدارة الطاولات واللاعبين والجلسات</p>
+                </div>
+
+                <div class="section-card ps" onclick="openPSDashboard()">
+                    <div class="section-icon">🎮</div>
+                    <h2 class="section-title">صالة البلايستيشن</h2>
+                    <p class="section-description">إدارة الأجهزة واللاعبين والجلسات</p>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <button class="action-btn" onclick="openAdvancedSearch()">🔍 بحث متقدم</button>
+                <button class="action-btn purple" onclick="showNotifications()">🔔 الإشعارات</button>
+            </div>
+        </main>
+
+        <div id="section-view" class="section-dashboard hidden"></div>
+    </div>
+
+    <!-- نموذج تسجيل لاعب -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" id="modal-title">➕ تسجيل لاعب جديد</div>
+            <div class="modal-body">
+                <form id="register-form" onsubmit="handleRegisterPlayer(event)">
+                    <div class="form-group">
+                        <label class="form-label">👤 اسم اللاعب</label>
+                        <input type="text" class="form-input" id="player-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" id="table-label">🎯 رقم الطاولة</label>
+                        <input type="text" class="form-input" id="table-number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">💰 سعر الكيم (د.ع)</label>
+                        <input type="number" class="form-input" id="hourly-rate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">⏳ المدة (دقائق)</label>
+                        <select class="form-select" id="duration">
+                            <option value="10">10 دقائق</option>
+                            <option value="15">15 دقيقة</option>
+                            <option value="30">30 دقيقة</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📝 ملاحظات (اختياري)</label>
+                        <input type="text" class="form-input" id="player-notes">
+                    </div>
+
+                    <div class="info-box">
+                        <p>ℹ️ وقت البدء يسجل تلقائياً عند الضغط على تسجيل</p>
+                            <p>💵 السعر الافتراضي: <span id="default-rate">5000</span> د.ع/كيم</p>
+                        <p>⏳ العداد التنازلي يشتغل مباشر حسب المدة اللي تختارها</p>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-modal btn-save">💾 تسجيل اللاعب</button>
+                        <button type="button" class="btn-modal btn-cancel" onclick="closeRegisterModal()">↩ رجوع</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة الإشعارات -->
+    <div id="notifications-modal" class="notifications-modal">
+        <div class="notifications-container">
+            <div class="notifications-header">
+                <span>🔔 مركز الإشعارات</span>
+                <button class="notifications-close" onclick="closeNotifications()">×</button>
+            </div>
+            <div class="notifications-body" id="notifications-list"></div>
+        </div>
+    </div>
+
+    <!-- نافذة البحث -->
+    <div id="search-modal" class="search-modal">
+        <div class="search-container">
+            <div class="search-header">🔍 بحث في السجلات (بلياردو + بلايستيشن)</div>
+            <div class="search-body">
+                <div class="search-input-group">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        id="search-input" 
+                        placeholder="ابحث عن جلسة بالاسم أو رقم الطاولة / الجهاز"
+                        onkeyup="handleSearch(event)"
+                    >
+                </div>
+                <div class="search-results" id="search-results"></div>
+                <div class="search-buttons">
+                    <button class="btn-primary-custom" onclick="performSearch()">🔍 بحث</button>
+                    <button class="btn-secondary-custom" onclick="closeSearchModal()">← إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة التعديل -->
+    <div id="edit-modal" class="edit-modal">
+        <div class="edit-container">
+            <div class="edit-header">✏️ تعديل بيانات الجلسة</div>
+            <div class="edit-body">
+                <form id="edit-form" onsubmit="handleEditPlayer(event)">
+                    <div class="form-group">
+                        <label class="form-label">👤 الاسم</label>
+                        <input type="text" class="form-input" id="edit-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" id="edit-table-label">🎯 رقم الطاولة</label>
+                        <input type="text" class="form-input" id="edit-table" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">💰 السعر الخاص (د.ع/كيم)</label>
+                        <div class="current-info">
+                            <p>الحالي: <span id="edit-current-rate"></span> د.ع/كيم</p>
+                        </div>
+                        <input type="number" class="form-input" id="edit-rate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📝 ملاحظات</label>
+                        <input type="text" class="form-input" id="edit-notes">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">⏳ الوقت المتبقي (بالثواني)</label>
+                        <input type="number" class="form-input" id="edit-remaining" required>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-modal btn-save">✔ حفظ التعديلات</button>
+                        <button type="button" class="btn-modal btn-cancel" onclick="closeEditModal()">✕ إلغاء</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="edit-container">
+            <div class="edit-header">⚙️ الإعدادات</div>
+            <div class="edit-body">
+                <div style="display:flex; gap:8px; margin-bottom:10px;">
+                    <button class="btn-primary-custom" onclick="showSettingsTab('account')">الحساب</button>
+                    <button class="btn-secondary-custom" onclick="showSettingsTab('appearance')">المظهر</button>
+                    <button class="btn-secondary-custom" onclick="showSettingsTab('backup')">النسخ الاحتياطي</button>
+                    <button class="btn-secondary-custom" onclick="showSettingsTab('users')">المستخدمون</button>
+                </div>
+
+                <div id="tab-account">
+                    <div class="form-group">
+                        <label class="form-label">👤 اسم العرض</label>
+                        <input id="set-display-name" class="form-input" placeholder="اسم يظهر أعلى يمين" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🔑 كلمة المرور (اختياري)</label>
+                        <input id="set-password" type="password" class="form-input" placeholder="اتركها فارغة إذا ما تريد تغيير" />
+                    </div>
+                    <button class="btn-primary-custom" onclick="saveAccountSettings()">💾 حفظ</button>
+                </div>
+
+                <div id="tab-appearance" style="display:none">
+                    <div class="form-group">
+                        <label class="form-label">🎨 الثيم</label>
+                        <select id="theme-select" class="form-select">
+                            <option value="gold">ذهبي</option>
+                            <option value="blue">أزرق</option>
+                            <option value="dark">أسود</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🔔 صوت انتهاء الوقت</label>
+                        <select id="notif-sound" class="form-select">
+                            <option value="on">تشغيل</option>
+                            <option value="off">إيقاف</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary-custom" onclick="saveAppearance()">✅ تطبيق</button>
+                </div>
+
+                <div id="tab-backup" style="display:none">
+                    <div class="info-box">
+                        <p>ينحفظ كل شيء محلياً بالمتصفح لكل مستخدم لوحده.</p>
+                    </div>
+                    <button class="btn-primary-custom" onclick="exportUserData()">⬇️ تصدير بيانات المستخدم</button>
+                    <input type="file" id="import-file" accept="application/json" style="display:none" />
+                    <button class="btn-secondary-custom" onclick="document.getElementById('import-file').click()">⬆️ استيراد</button>
+                </div>
+
+                <div id="tab-users" style="display:none">
+                    <div class="form-group">
+                        <label class="form-label">👤 اسم المستخدم الجديد</label>
+                        <input id="new-username" class="form-input" placeholder="مثال: ali" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🔑 كلمة المرور</label>
+                        <input id="new-password" type="password" class="form-input" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🎚️ الدور</label>
+                        <select id="new-role" class="form-select">
+                            <option value="مدير">مدير</option>
+                            <option value="مستخدم">مستخدم</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary-custom" onclick="createUserFromSettings()">➕ إنشاء مستخدم</button>
+
+                    <div class="info-box" style="margin-top:14px">
+                        <p>قائمة المستخدمين:</p>
+                        <div id="users-list" style="font-size:12px;color:#8b949e"></div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn-secondary-custom" onclick="closeSettings()">✕ إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Days Log Modal -->
+    <div id="dayslog-modal" class="modal">
+        <div class="edit-container">
+            <div class="edit-header">📅 سجل الأيام</div>
+            <div class="edit-body">
+                <div class="form-group">
+                    <label class="form-label">اختـر يوم</label>
+                    <input type="date" id="days-date" class="form-input" />
+                </div>
+                <div id="days-result" class="players-container"></div>
+                <div class="modal-footer">
+                    <button class="btn-secondary-custom" onclick="closeDaysLog()">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Modal -->
+    <div id="analytics-modal" class="modal">
+        <div class="edit-container">
+            <div class="edit-header">📊 التحليلات</div>
+            <div class="edit-body">
+                <div class="stats-grid" id="analytics-cards"></div>
+                <div class="modal-footer">
+                    <button class="btn-secondary-custom" onclick="closeAnalytics()">إغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="beep" preload="auto">
+        <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABYAAAAA//8AAP//AAD//wAA" type="audio/wav">
+    </audio>
+
+    <script>
+        const APP_DATA = {
+            users: {
+                admin: {
+                    password: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',
+                    name: 'المدير',
+                    role: 'مدير'
+                }
+            },
+            currentUser: null,
+            billiard: {
+                activePlayers: [],
+                completedSessions: [],
+                hourlyRate: 5000
+            },
+            ps: {
+                activePlayers: [],
+                completedSessions: [],
+                hourlyRate: 7000
+            },
+            notifications: []
+        };
+
+        let currentMode = null;
+        let editingPlayerId = null;
+        const countdownIntervals = {};
+
+        function loadData() {
+            const saved = localStorage.getItem('billiardSystemData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.assign(APP_DATA, data);
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('billiardSystemData', JSON.stringify(APP_DATA));
+        }
+
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+
+        window.addEventListener('load', () => {
+            loadData();
+            let progress = 0;
+            const progressBar = document.getElementById('progress');
+            
+            const interval = setInterval(() => {
+                progress += 2;
+                progressBar.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById('splash-screen').style.display = 'none';
+                        document.getElementById('login-screen').style.display = 'block';
+                    }, 300);
+                }
+            }, 20);
+        });
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (!username || !password) {
+                alert('الرجاء إدخال اسم المستخدم وكلمة المرور');
+                return;
+            }
+            
+            const hashedPassword = await hashPassword(password);
+            
+            if (APP_DATA.users[username] && APP_DATA.users[username].password === hashedPassword) {
+                APP_DATA.currentUser = {
+                    username: username,
+                    name: APP_DATA.users[username].name,
+                    role: APP_DATA.users[username].role
+                };
+                
+                document.getElementById('current-user-name').textContent = '👤 ' + APP_DATA.currentUser.name;
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-interface').style.display = 'block';
+                
+                startClock();
+                updateNotificationBadge();
+                addNotification('تسجيل دخول جديد', `${APP_DATA.currentUser.name} قام بتسجيل الدخول`, 'success');
+            } else {
+                alert('اسم المستخدم أو كلمة المرور غير صحيحة');
+                document.getElementById('password').value = '';
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                addNotification('🚪 تسجيل خروج', `${APP_DATA.currentUser.name} قام بتسجيل الخروج`, 'info');
+                
+                Object.keys(countdownIntervals).forEach(key => {
+                    clearInterval(countdownIntervals[key]);
+                });
+                
+                APP_DATA.currentUser = null;
+                currentMode = null;
+                document.getElementById('main-interface').style.display = 'none';
+                document.getElementById('login-screen').style.display = 'block';
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                document.getElementById('main-dashboard').classList.remove('hidden');
+                document.getElementById('section-view').classList.add('hidden');
+            }
+        }
+
+        function startClock() {
+            updateClock();
+            setInterval(updateClock, 1000);
+        }
+
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours() % 12 || 12;
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
+            
+            document.getElementById('time-display').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+        }
+
+        function addNotification(title, message, type = 'info') {
+            const notification = {
+                id: Date.now(),
+                title: title,
+                message: message,
+                type: type,
+                time: new Date().toLocaleString('ar-IQ'),
+                read: false
+            };
+            
+            APP_DATA.notifications.unshift(notification);
+            if (APP_DATA.notifications.length > 80) {
+                APP_DATA.notifications = APP_DATA.notifications.slice(0, 80);
+            }
+            
+            saveData();
+            updateNotificationBadge();
+        }
+
+        function updateNotificationBadge() {
+            const unreadCount = APP_DATA.notifications.filter(n => !n.read).length;
+            const notifBtn = document.querySelector('.btn-notification');
+            if (notifBtn) {
+                notifBtn.textContent = unreadCount > 0 ? `🔔 ${unreadCount}` : '🔔';
+                notifBtn.style.background = unreadCount > 0 ? '#1f6feb' : '#6e7681';
+            }
+        }
+
+        function showNotifications() {
+            const notificationsList = document.getElementById('notifications-list');
+            
+            if (APP_DATA.notifications.length === 0) {
+                notificationsList.innerHTML = `
+                    <div class="empty-notifications">
+                        <div class="empty-notifications-icon">🔭</div>
+                        <div class="empty-notifications-text">لا توجد إشعارات</div>
+                    </div>
+                `;
+            } else {
+                notificationsList.innerHTML = APP_DATA.notifications.map(notif => {
+                    const typeClass = notif.type || 'info';
+                    return `
+                        <div class="notification-item ${typeClass}">
+                            <div class="notification-title">${notif.title}</div>
+                            <div class="notification-message">${notif.message}</div>
+                            <div class="notification-time">${notif.time}</div>
+                        </div>
+                    `;
+                }).join('');
+                
+                APP_DATA.notifications.forEach(n => n.read = true);
+                saveData();
+                updateNotificationBadge();
+            }
+            
+            document.getElementById('notifications-modal').style.display = 'block';
+        }
+
+        function closeNotifications() {
+            document.getElementById('notifications-modal').style.display = 'none';
+        }
+
+        function openBilliardDashboard() {
+            currentMode = 'billiard';
+            showSectionDashboard();
+        }
+
+        function openPSDashboard() {
+            currentMode = 'ps';
+            showSectionDashboard();
+        }
+
+        function showSectionDashboard() {
+            document.getElementById('main-dashboard').classList.add('hidden');
+            const sectionView = document.getElementById('section-view');
+            sectionView.classList.remove('hidden');
+            
+            const mode = currentMode;
+            const data = APP_DATA[mode];
+            const icon = mode === 'billiard' ? '🎱' : '🎮';
+            const title = mode === 'billiard' ? 'البلياردو' : 'البلايستيشن';
+            
+            const activeCount = data.activePlayers.length;
+            const totalRevenue = data.completedSessions.reduce((sum, s) => sum + s.cost, 0);
+            const completedCount = data.completedSessions.length;
+            const avgSession = completedCount > 0 ? Math.floor(totalRevenue / completedCount) : 0;
+            
+            sectionView.innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-accent" style="background: #238636"></div>
+                        <div class="stat-card-content">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-value">${activeCount}</div>
+                            <div class="stat-label">لاعبين نشطين</div>
+                            <span class="stat-badge" style="background: #238636; color: white">🟢 نشط</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-accent" style="background: #d4af37"></div>
+                        <div class="stat-card-content">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-value">${totalRevenue.toLocaleString()}</div>
+                            <div class="stat-label">أرباح اليوم (د.ع)</div>
+                            <span class="stat-badge" style="background: #d4af37; color: white">اليوم</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-accent" style="background: #1f6feb"></div>
+                        <div class="stat-card-content">
+                            <div class="stat-icon">📋</div>
+                            <div class="stat-value">${completedCount}</div>
+                            <div class="stat-label">جلسات مكتملة</div>
+                            <span class="stat-badge" style="background: #1f6feb; color: white">مكتمل</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-accent" style="background: #8957e5"></div>
+                        <div class="stat-card-content">
+                            <div class="stat-icon">⚡</div>
+                            <div class="stat-value">${avgSession.toLocaleString()}</div>
+                            <div class="stat-label">متوسط الجلسة (د.ع)</div>
+                            <span class="stat-badge" style="background: #8957e5; color: white">متوسط</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-title-main">${icon} إدارة صالة ${title}</h2>
+
+                <div class="action-buttons">
+                    <button class="action-button" onclick="openRegisterModal()">➕ تسجيل لاعب جديد</button>
+                    <button class="action-button blue" onclick="showActivePlayers()">👥 اللاعبين (${activeCount})</button>
+                    <button class="action-button purple" onclick="showHistory()">📋 سجل اليوم</button>
+                    <button class="action-button gold" onclick="openDaysLog()">📅 سجل الأيام</button>
+                    <button class="action-button red" onclick="openAnalytics()">📊 التحليلات</button>
+                    <button class="action-button gray" onclick="openSettings()">⚙️ الإعدادات</button>
+                </div>
+
+                <button class="action-button gray" style="margin-top: 20px;" onclick="backToMain()">↩ رجوع للقائمة الرئيسية</button>
+            `;
+        }
+
+        function backToMain() {
+            Object.keys(countdownIntervals).forEach(key => {
+                clearInterval(countdownIntervals[key]);
+                delete countdownIntervals[key];
+            });
+            
+            document.getElementById('section-view').classList.add('hidden');
+            document.getElementById('main-dashboard').classList.remove('hidden');
+            currentMode = null;
+        }
+
+        function openRegisterModal() {
+            const mode = currentMode;
+            const rate = APP_DATA[mode].hourlyRate;
+            const icon = mode === 'billiard' ? '🎱' : '🎮';
+            const title = mode === 'billiard' ? 'بلياردو' : 'بلايستيشن';
+            const tableLabel = mode === 'billiard' ? '🎯 رقم الطاولة' : '🎮 رقم الجهاز (1-4)';
+            
+            document.getElementById('modal-title').textContent = `➕ تسجيل لاعب جديد - ${title} ${icon}`;
+            document.getElementById('table-label').textContent = tableLabel;
+            document.getElementById('hourly-rate').value = rate;
+            document.getElementById('default-rate').textContent = rate.toLocaleString();
+            
+            document.getElementById('register-modal').style.display = 'block';
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('register-modal').style.display = 'none';
+            document.getElementById('register-form').reset();
+        }
+
+        function handleRegisterPlayer(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('player-name').value.trim();
+            const tableNumber = document.getElementById('table-number').value.trim();
+            const rate = parseInt(document.getElementById('hourly-rate').value);
+            const duration = parseInt(document.getElementById('duration').value);
+            const notes = document.getElementById('player-notes').value.trim();
+            
+            // When registering manually, we treat the entered rate as the price per game.
+            // Each manual registration represents a single game (kim) by default, so
+            // gamesCount is 1 and customRate equals the per-game rate.
+            const player = {
+                id: Date.now(),
+                name: name,
+                tableNumber: tableNumber,
+                startTime: Date.now(),
+                ratePerGame: rate,      // store the price per kim
+                gamesCount: 1,           // manual registration always one kim unless edited later
+                customRate: rate,        // total cost for this player = ratePerGame * gamesCount
+                notes: notes,
+                remaining: duration * 60,
+                initialMinutes: duration,
+                overtimeAlerted: false,
+                timeFinishedAlerted: false
+            };
+            
+            APP_DATA[currentMode].activePlayers.push(player);
+            saveData();
+            
+            addNotification(
+                '✔ تسجيل جديد',
+                `تم تسجيل ${name} على ${currentMode === 'billiard' ? 'الطاولة' : 'الجهاز'} ${tableNumber} لمدة ${duration} دقيقة`,
+                'success'
+            );
+            
+            closeRegisterModal();
+            showActivePlayers();
+        }
+
+        function showActivePlayers() {
+            const mode = currentMode;
+            const players = APP_DATA[mode].activePlayers;
+            const icon = mode === 'billiard' ? '🎱' : '🎮';
+            const title = mode === 'billiard' ? 'بلياردو' : 'بلايستيشن';
+            const deviceLabel = mode === 'billiard' ? 'الطاولة' : 'الجهاز';
+            
+            const sectionView = document.getElementById('section-view');
+            
+            if (players.length === 0) {
+                sectionView.innerHTML = `
+                    <h2 class="section-title-main">👥 اللاعبين النشطين (0) - ${title} ${icon}</h2>
+                    <button class="action-button gray" onclick="showSectionDashboard()" style="margin-bottom: 20px;">← رجوع</button>
+                    <div class="empty-state">
+                        <div class="empty-icon">👥</div>
+                        <div class="empty-text">لا توجد جلسات نشطة حالياً</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            let playersHTML = players.map(player => createPlayerCard(player, mode, deviceLabel)).join('');
+            
+            sectionView.innerHTML = `
+                <h2 class="section-title-main">👥 اللاعبين النشطين (${players.length}) - ${title} ${icon}</h2>
+                <button class="action-button gray" onclick="showSectionDashboard()" style="margin-bottom: 20px;">← رجوع</button>
+                <div class="players-container">
+                    ${playersHTML}
+                </div>
+            `;
+            
+            players.forEach(player => startCountdown(player));
+        }
+
+        function createPlayerCard(player, mode, deviceLabel) {
+            const now = Date.now();
+            const duration = Math.floor((now - player.startTime) / 1000);
+            const hours = Math.floor(duration / 3600);
+            const minutes = Math.floor((duration % 3600) / 60);
+            const durationStr = `${hours}:${minutes.toString().padStart(2, '0')}`;
+            
+            const startTimeStr = new Date(player.startTime).toLocaleTimeString('ar-IQ', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+            
+            const currentCost = calculateCost(player.startTime, now, player.customRate);
+            
+            let stripeColor = '#238636';
+            const hoursActive = duration / 3600;
+            if (hoursActive >= 3) stripeColor = '#da3633';
+            else if (hoursActive >= 2) stripeColor = '#d4af37';
+            
+            const remainingMins = Math.floor(player.remaining / 60);
+            const remainingSecs = player.remaining % 60;
+            const countdownClass = player.remaining <= 0 ? 'countdown-expired' : '';
+            
+            return `
+                <div class="player-card">
+                    <div class="player-card-stripe" style="background: ${stripeColor}"></div>
+                    <div class="player-card-content">
+                        <div class="player-header">
+                            <div class="player-info">
+                                <h3>👤 ${player.name}</h3>
+                                <span class="player-table-badge">${deviceLabel} ${player.tableNumber}</span>
+                                ${player.notes ? `<div class="player-notes">📝 ${player.notes}</div>` : ''}
+                            </div>
+                            <div class="player-actions">
+                                <button class="btn-icon btn-edit" onclick="editPlayer(${player.id})" title="تعديل">✏️</button>
+                                <button class="btn-icon btn-end" onclick="endSession(${player.id})" title="إنهاء">❌</button>
+                            </div>
+                        </div>
+                        <div class="player-stats">
+                            <div class="countdown-box ${countdownClass}" id="countdown-${player.id}">
+                                ⏳ ${remainingMins.toString().padStart(2, '0')}:${remainingSecs.toString().padStart(2, '0')}
+                            </div>
+                            <div class="player-stat-box">
+                                <div class="player-stat-label">⏰ البدء</div>
+                                <div class="player-stat-value" style="color: #58a6ff">${startTimeStr}</div>
+                            </div>
+                            <div class="player-stat-box">
+                                <div class="player-stat-label">⏱️ المدة</div>
+                                <div class="player-stat-value" style="color: #d4af37">${durationStr}</div>
+                            </div>
+                            <div class="player-stat-box">
+                                <div class="player-stat-label">💵 السعر</div>
+                                <div class="player-stat-value" style="color: #8957e5">${player.customRate.toLocaleString()} د.ع/كيم</div>
+                            </div>
+                            <div class="player-stat-box">
+                                <div class="player-stat-label">💰 التكلفة</div>
+                                <div class="player-stat-value" style="color: #3fb950">${currentCost.toLocaleString()} د.ع</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function calculateCost(startTime, endTime, rate) {
+            // Modified: cost is based on a fixed per-game rate rather than time.
+            // Always return the rate without multiplying by hours.
+            return rate;
+        }
+
+        function startCountdown(player) {
+            if (countdownIntervals[player.id]) {
+                clearInterval(countdownIntervals[player.id]);
+            }
+            
+            countdownIntervals[player.id] = setInterval(() => {
+                const elem = document.getElementById(`countdown-${player.id}`);
+                if (!elem) {
+                    clearInterval(countdownIntervals[player.id]);
+                    return;
+                }
+                
+                player.remaining = Math.max(0, player.remaining - 1);
+                
+                const mins = Math.floor(player.remaining / 60);
+                const secs = player.remaining % 60;
+                
+                elem.textContent = `⏳ ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                
+                if (player.remaining === 0) {
+                    elem.classList.add('countdown-expired');
+                    
+                    if (!player.timeFinishedAlerted) {
+                        player.timeFinishedAlerted = true;
+                        const deviceLabel = currentMode === 'billiard' ? 'الطاولة' : 'الجهاز';
+                        alert(`⏰ انتهاء الوقت\n\nانتهى وقت ${player.name} على ${deviceLabel} ${player.tableNumber}`);
+                        addNotification(
+                            '⏰ انتهاء الجلسة',
+                            `انتهى وقت ${player.name} على ${deviceLabel} ${player.tableNumber}`,
+                            'warning'
+                        );
+                    }
+                    
+                    clearInterval(countdownIntervals[player.id]);
+                }
+                
+                saveData();
+            }, 1000);
+        }
+
+        function endSession(playerId) {
+            const mode = currentMode;
+            const player = APP_DATA[mode].activePlayers.find(p => p.id === playerId);
+            if (!player) return;
+            
+            const endTime = Date.now();
+            const duration = Math.floor((endTime - player.startTime) / 1000);
+            const hours = Math.floor(duration / 3600);
+            const minutes = Math.floor((duration % 3600) / 60);
+            const durationStr = `${hours}:${minutes.toString().padStart(2, '0')}`;
+            
+            const cost = calculateCost(player.startTime, endTime, player.customRate);
+            
+            const session = {
+                id: endTime,
+                name: player.name,
+                tableNumber: player.tableNumber,
+                startTime: player.startTime,
+                endTime: endTime,
+                duration: durationStr,
+                cost: cost,
+                rateUsed: player.customRate,
+                notes: player.notes
+            };
+            
+            APP_DATA[mode].completedSessions.push(session);
+            APP_DATA[mode].activePlayers = APP_DATA[mode].activePlayers.filter(p => p.id !== playerId);
+            
+            if (countdownIntervals[playerId]) {
+                clearInterval(countdownIntervals[playerId]);
+                delete countdownIntervals[playerId];
+            }
+            
+            saveData();
+            
+            const deviceLabel = mode === 'billiard' ? 'الطاولة' : 'الجهاز';
+            addNotification('✔ جلسة منتهية', `${player.name} - ${cost.toLocaleString()} د.ع`, 'success');
+            
+            alert(`✔ انتهت الجلسة\n\nاللاعب: ${player.name}\n${deviceLabel}: ${player.tableNumber}\nالمدة: ${durationStr}\nالسعر: ${player.customRate.toLocaleString()} د.ع/كيم\nالمبلغ الإجمالي: ${cost.toLocaleString()} د.ع`);
+            
+            showActivePlayers();
+        }
+
+        function editPlayer(playerId) {
+            const mode = currentMode;
+            const player = APP_DATA[mode].activePlayers.find(p => p.id === playerId);
+            if (!player) return;
+            
+            editingPlayerId = playerId;
+            
+            const deviceLabel = mode === 'billiard' ? '🎯 رقم الطاولة' : '🎮 رقم الجهاز';
+            document.getElementById('edit-table-label').textContent = deviceLabel;
+            document.getElementById('edit-name').value = player.name;
+            document.getElementById('edit-table').value = player.tableNumber;
+            document.getElementById('edit-rate').value = player.customRate;
+            document.getElementById('edit-current-rate').textContent = player.customRate.toLocaleString();
+            document.getElementById('edit-notes').value = player.notes || '';
+            document.getElementById('edit-remaining').value = player.remaining;
+            
+            document.getElementById('edit-modal').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+            editingPlayerId = null;
+        }
+
+        function handleEditPlayer(event) {
+            event.preventDefault();
+            
+            if (!editingPlayerId) return;
+            
+            const mode = currentMode;
+            const player = APP_DATA[mode].activePlayers.find(p => p.id === editingPlayerId);
+            if (!player) return;
+            
+            const newName = document.getElementById('edit-name').value.trim();
+            const newTable = document.getElementById('edit-table').value.trim();
+            const newRate = parseInt(document.getElementById('edit-rate').value);
+            const newNotes = document.getElementById('edit-notes').value.trim();
+            const newRemaining = parseInt(document.getElementById('edit-remaining').value);
+            
+            if (!newName || !newTable || newRate <= 0) {
+                alert('الرجاء إدخال بيانات صحيحة');
+                return;
+            }
+            
+            player.name = newName;
+            player.tableNumber = newTable;
+            player.customRate = newRate;
+            player.notes = newNotes;
+            player.remaining = Math.max(0, newRemaining);
+            
+            if (newRemaining > 0) {
+                player.timeFinishedAlerted = false;
+            }
+            
+            saveData();
+            
+            addNotification('✏️ تعديل', `تم تعديل بيانات ${newName}`, 'info');
+            
+            closeEditModal();
+            showActivePlayers();
+        }
+
+        function showHistory() {
+            const mode = currentMode;
+            const sessions = APP_DATA[mode].completedSessions;
+            const icon = mode === 'billiard' ? '🎱' : '🎮';
+            const title = mode === 'billiard' ? 'بلياردو' : 'بلايستيشن';
+            const deviceLabel = mode === 'billiard' ? 'طاولة' : 'جهاز';
+            
+            const totalRevenue = sessions.reduce((sum, s) => sum + s.cost, 0);
+            const avgSession = sessions.length > 0 ? Math.floor(totalRevenue / sessions.length) : 0;
+            
+            const sectionView = document.getElementById('section-view');
+            
+            if (sessions.length === 0) {
+                sectionView.innerHTML = `
+                    <h2 class="section-title-main">📋 سجل اليوم والأرباح - ${title} ${icon}</h2>
+                    <button class="action-button gray" onclick="showSectionDashboard()" style="margin-bottom: 20px;">← رجوع</button>
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <div class="empty-text">لا توجد جلسات مكتملة اليوم</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const sessionsHTML = sessions.slice().reverse().map(session => {
+                const startTime = new Date(session.startTime).toLocaleTimeString('ar-IQ', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                });
+                const endTime = new Date(session.endTime).toLocaleTimeString('ar-IQ', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                });
+                
+                return `
+                    <div class="player-card">
+                        <div class="player-card-stripe" style="background: #8957e5"></div>
+                        <div class="player-card-content">
+                            <div class="player-header">
+                                <div class="player-info">
+                                    <h3>👤 ${session.name}</h3>
+                                    <span class="player-table-badge" style="background: #8957e5">${deviceLabel} ${session.tableNumber}</span>
+                                    ${session.notes ? `<div class="player-notes">📝 ${session.notes}</div>` : ''}
+                                </div>
+                                <div style="font-size: 16px; font-weight: bold; color: #3fb950;">
+                                    ${session.cost.toLocaleString()} د.ع
+                                </div>
+                            </div>
+                            <div style="font-size: 9px; color: #6e7681; margin-top: 10px; text-align: right;">
+                                من ${startTime} إلى ${endTime} • ${session.duration} • ${session.rateUsed.toLocaleString()} د.ع/كيم
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            sectionView.innerHTML = `
+                <h2 class="section-title-main">📋 سجل اليوم والأرباح - ${title} ${icon}</h2>
+                <button class="action-button gray" onclick="showSectionDashboard()" style="margin-bottom: 20px;">← رجوع</button>
+                
+                <div class="stat-card" style="margin-bottom: 20px;">
+                    <div class="stat-card-accent" style="background: #d4af37"></div>
+                    <div class="stat-card-content">
+                        <div style="font-size: 16px; font-weight: bold; color: #c9d1d9; margin-bottom: 10px;">💰 إجمالي أرباح اليوم</div>
+                        <div style="font-size: 36px; font-weight: bold; color: #d4af37; margin: 10px 0;">${totalRevenue.toLocaleString()} د.ع</div>
+                        <div style="font-size: 11px; color: #8b949e;">
+                            🎯 ${sessions.length} جلسة • 📊 متوسط: ${avgSession.toLocaleString()} د.ع
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="players-container">
+                    ${sessionsHTML}
+                </div>
+            `;
+        }
+
+        function openAdvancedSearch() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-results').innerHTML = '';
+            document.getElementById('search-modal').style.display = 'block';
+        }
+
+        function closeSearchModal() {
+            document.getElementById('search-modal').style.display = 'none';
+        }
+
+        function handleSearch(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        }
+
+        function performSearch() {
+            const query = document.getElementById('search-input').value.trim().toLowerCase();
+            const resultsContainer = document.getElementById('search-results');
+            
+            if (!query) {
+                resultsContainer.innerHTML = '<div class="search-no-results">⚠️ أدخل كلمة البحث</div>';
+                return;
+            }
+            
+            const allSessions = [];
+            
+            APP_DATA.billiard.completedSessions.forEach(s => {
+                allSessions.push({ ...s, source: 'billiard' });
+            });
+            
+            APP_DATA.ps.completedSessions.forEach(s => {
+                allSessions.push({ ...s, source: 'ps' });
+            });
+            
+            const results = allSessions.filter(session => {
+                const nameMatch = session.name.toLowerCase().includes(query);
+                const tableMatch = session.tableNumber.toString().toLowerCase().includes(query);
+                return nameMatch || tableMatch;
+            });
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="search-no-results">❌ لا توجد نتائج مطابقة</div>';
+                return;
+            }
+            
+            resultsContainer.innerHTML = `
+                <div style="font-size: 13px; font-weight: bold; color: #3fb950; margin-bottom: 15px; text-align: center;">
+                    ✔ تم العثور على ${results.length} نتيجة
+                </div>
+                ${results.map(session => {
+                    const icon = session.source === 'billiard' ? '🎱' : '🎮';
+                    const deviceLabel = session.source === 'billiard' ? 'طاولة' : 'جهاز';
+                    
+                    const startTime = new Date(session.startTime).toLocaleTimeString('ar-IQ', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+                    
+                    const endTime = new Date(session.endTime).toLocaleTimeString('ar-IQ', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+                    
+                    return `
+                        <div class="search-result-item">
+                            <div class="search-result-header">
+                                <div>
+                                    <span class="search-result-name">${icon} ${session.name}</span>
+                                    <div style="margin-top: 5px;">
+                                        <span style="background: #8957e5; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px;">
+                                            ${deviceLabel} ${session.tableNumber}
+                                        </span>
+                                    </div>
+                                    ${session.notes ? `<div style="font-size: 10px; color: #8b949e; margin-top: 5px;">📝 ${session.notes}</div>` : ''}
+                                </div>
+                                <span class="search-result-cost">${session.cost.toLocaleString()} د.ع</span>
+                            </div>
+                            <div class="search-result-details">
+                                من ${startTime} إلى ${endTime} • ${session.duration} • ${session.rateUsed.toLocaleString()} د.ع/كيم
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            `;
+        }
+
+        window.addEventListener('click', (event) => {
+            const registerModal = document.getElementById('register-modal');
+            const notificationsModal = document.getElementById('notifications-modal');
+            const searchModal = document.getElementById('search-modal');
+            const editModal = document.getElementById('edit-modal');
+            
+            if (event.target === registerModal) {
+                closeRegisterModal();
+            }
+            if (event.target === notificationsModal) {
+                closeNotifications();
+            }
+            if (event.target === searchModal) {
+                closeSearchModal();
+            }
+            if (event.target === editModal) {
+                closeEditModal();
+            }
+        });
+
+        window.addEventListener('load', () => {
+            loadData();
+            updateNotificationBadge();
+        });
+
+        // Settings Functions
+        function getStorageKey() {
+            const user = APP_DATA && APP_DATA.currentUser ? APP_DATA.currentUser.username : 'guest';
+            return 'billiardSystemData_' + user;
+        }
+
+        function loadDataPerUser() {
+            try {
+                const raw = localStorage.getItem(getStorageKey());
+                if (raw) {
+                    const perUser = JSON.parse(raw);
+                    if (perUser.billiard) APP_DATA.billiard = perUser.billiard;
+                    if (perUser.ps) APP_DATA.ps = perUser.ps;
+                    if (perUser.notifications) APP_DATA.notifications = perUser.notifications;
+                }
+            } catch(e) { console.error('loadDataPerUser', e); }
+        }
+
+        function saveDataPerUser() {
+            try {
+                const perUser = {
+                    billiard: APP_DATA.billiard,
+                    ps: APP_DATA.ps,
+                    notifications: APP_DATA.notifications
+                };
+                localStorage.setItem(getStorageKey(), JSON.stringify(perUser));
+            } catch(e) { console.error('saveDataPerUser', e); }
+        }
+
+        function openSettings() {
+            refreshUsersList();
+            document.getElementById('settings-modal').style.display = 'block';
+            const theme = localStorage.getItem('ui_theme') || 'gold';
+            const sound = localStorage.getItem('notif_sound') || 'on';
+            const nm = APP_DATA && APP_DATA.currentUser ? APP_DATA.currentUser.name : 'المدير';
+            const nmEl = document.getElementById('set-display-name');
+            if (nmEl) nmEl.value = nm;
+            const tSel = document.getElementById('theme-select');
+            if (tSel) tSel.value = theme;
+            const sSel = document.getElementById('notif-sound');
+            if (sSel) sSel.value = sound;
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-modal').style.display = 'none';
+        }
+
+        function showSettingsTab(id) {
+            ['account', 'appearance', 'backup', 'users'].forEach(function(k) {
+                const el = document.getElementById('tab-' + k);
+                if (el) el.style.display = (k === id) ? 'block' : 'none';
+            });
+        }
+
+        async function saveAccountSettings() {
+            const newName = document.getElementById('set-display-name').value.trim();
+            const newPass = document.getElementById('set-password').value.trim();
+            if (newName) {
+                APP_DATA.currentUser.name = newName;
+                const el = document.getElementById('current-user-name');
+                if (el) el.textContent = '👤 ' + newName;
+            }
+            if (newPass) {
+                const h = await hashPassword(newPass);
+                APP_DATA.users[APP_DATA.currentUser.username].password = h;
+            }
+            saveData();
+            alert('تم حفظ إعدادات الحساب ✅');
+            const p = document.getElementById('set-password');
+            if (p) p.value = '';
+        }
+
+        function saveAppearance() {
+            const theme = document.getElementById('theme-select').value;
+            const sound = document.getElementById('notif-sound').value;
+            localStorage.setItem('ui_theme', theme);
+            localStorage.setItem('notif_sound', sound);
+            alert('تم التطبيق ✅');
+        }
+
+        function refreshUsersList() {
+            const box = document.getElementById('users-list');
+            if (!box) return;
+            const names = Object.keys(APP_DATA.users || {});
+            if (names.length === 0) {
+                box.innerHTML = 'لا يوجد مستخدمون.';
+                return;
+            }
+            box.innerHTML = names.map(function(u) {
+                return '<div>• ' + u + ' — ' + (APP_DATA.users[u].role || 'مستخدم') + '</div>';
+            }).join('');
+        }
+
+        async function createUserFromSettings() {
+            const u = document.getElementById('new-username').value.trim();
+            const p = document.getElementById('new-password').value.trim();
+            const r = document.getElementById('new-role').value;
+            if (!u || !p) {
+                alert('أدخل اسم وكلمة مرور');
+                return;
+            }
+            if (APP_DATA.users[u]) {
+                alert('المستخدم موجود مسبقاً');
+                return;
+            }
+            const h = await hashPassword(p);
+            APP_DATA.users[u] = { password: h, name: u, role: r };
+            saveData();
+            refreshUsersList();
+            document.getElementById('new-username').value = '';
+            document.getElementById('new-password').value = '';
+            alert('تم إضافة المستخدم ✅');
+        }
+
+        function exportUserData() {
+            const data = localStorage.getItem(getStorageKey()) || '{}';
+            const blob = new Blob([data], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = (APP_DATA.currentUser ? APP_DATA.currentUser.username : 'user') + '_backup.json';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        const importFileEl = document.getElementById('import-file');
+        if (importFileEl) {
+            importFileEl.addEventListener('change', function(e) {
+                const f = e.target.files[0];
+                if (!f) return;
+                const rd = new FileReader();
+                rd.onload = function() {
+                    try {
+                        const obj = JSON.parse(rd.result);
+                        localStorage.setItem(getStorageKey(), JSON.stringify(obj));
+                        loadDataPerUser();
+                        alert('تم الاستيراد ✅');
+                    } catch(err) {
+                        alert('ملف غير صالح');
+                    }
+                };
+                rd.readAsText(f);
+            });
+        }
+
+        function openDaysLog() {
+            document.getElementById('dayslog-modal').style.display = 'block';
+            const inp = document.getElementById('days-date');
+            const today = new Date().toISOString().slice(0, 10);
+            if (inp) inp.value = today;
+            renderDay(today);
+        }
+
+        function closeDaysLog() {
+            document.getElementById('dayslog-modal').style.display = 'none';
+        }
+
+        const daysDateEl = document.getElementById('days-date');
+        if (daysDateEl) {
+            daysDateEl.addEventListener('change', function(e) {
+                renderDay(e.target.value);
+            });
+        }
+
+        function renderDay(iso) {
+            const box = document.getElementById('days-result');
+            if (!box) return;
+            const all = [].concat(
+                (APP_DATA.billiard && APP_DATA.billiard.completedSessions ? APP_DATA.billiard.completedSessions : []).map(function(s) {
+                    s = Object.assign({}, s);
+                    s.source = 'billiard';
+                    return s;
+                }),
+                (APP_DATA.ps && APP_DATA.ps.completedSessions ? APP_DATA.ps.completedSessions : []).map(function(s) {
+                    s = Object.assign({}, s);
+                    s.source = 'ps';
+                    return s;
+                })
+            );
+            const daySessions = all.filter(function(s) {
+                const d = new Date(s.endTime || s.startTime);
+                const ds = d.toISOString().slice(0, 10);
+                return ds === iso;
+            });
+            if (daySessions.length === 0) {
+                box.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">لا توجد جلسات في هذا اليوم</div></div>';
+                return;
+            }
+            const total = daySessions.reduce(function(t, s) {
+                return t + (s.cost || 0);
+            }, 0);
+            const parts = [];
+            parts.push(
+                '<div class="stat-card" style="margin-bottom:14px"><div class="stat-card-accent" style="background: #d4af37"></div><div class="stat-card-content"><div style="font-weight:bold;color:#c9d1d9">إجمالي أرباح اليوم</div><div style="font-size:32px;color:#d4af37">' + total.toLocaleString() + ' د.ع</div><div style="font-size:12px;color:#8b949e">عدد الجلسات: ' + daySessions.length + '</div></div></div>'
+            );
+            parts.push('<div class="players-container">');
+            daySessions.slice().reverse().forEach(function(s) {
+                const device = s.source === 'billiard' ? '🎱 طاولة' : '🎮 جهاز';
+                parts.push(
+                    '<div class="player-card"><div class="player-card-stripe" style="background:#8957e5"></div><div class="player-card-content"><div class="player-header"><div class="player-info"><h3>👤 ' + s.name + '</h3><span class="player-table-badge">' + device + ' ' + s.tableNumber + '</span></div><div style="font-weight:bold;color:#3fb950">' + (s.cost || 0).toLocaleString() + ' د.ع</div></div><div style="font-size:11px;color:#8b949e">المدة: ' + (s.duration || '--') + ' • السعر: ' + (s.rateUsed || 0).toLocaleString() + ' د.ع/كيم</div></div></div>'
+                );
+            });
+            parts.push('</div>');
+            box.innerHTML = parts.join('');
+        }
+
+        function openAnalytics() {
+            document.getElementById('analytics-modal').style.display = 'block';
+            const b = (APP_DATA.billiard && APP_DATA.billiard.completedSessions) ? APP_DATA.billiard.completedSessions : [];
+            const p = (APP_DATA.ps && APP_DATA.ps.completedSessions) ? APP_DATA.ps.completedSessions : [];
+            const revenueB = b.reduce(function(t, s) {
+                return t + (s.cost || 0);
+            }, 0);
+            const revenueP = p.reduce(function(t, s) {
+                return t + (s.cost || 0);
+            }, 0);
+            const total = revenueB + revenueP;
+            const avgB = b.length ? Math.floor(revenueB / b.length) : 0;
+            const avgP = p.length ? Math.floor(revenueP / p.length) : 0;
+
+            function calcTopDevice(arr) {
+                const map = {};
+                arr.forEach(function(s) {
+                    const k = (s.source === 'billiard' ? 'طاولة ' : 'جهاز ') + s.tableNumber;
+                    map[k] = (map[k] || 0) + 1;
+                });
+                let best = '—', cnt = 0;
+                Object.keys(map).forEach(function(k) {
+                    if (map[k] > cnt) {
+                        cnt = map[k];
+                        best = k;
+                    }
+                });
+                return best + ' (' + cnt + ')';
+            }
+
+            const top = calcTopDevice(
+                b.map(function(x) {
+                    x = Object.assign({}, x);
+                    x.source = 'billiard';
+                    return x;
+                }).concat(p.map(function(x) {
+                    x = Object.assign({}, x);
+                    x.source = 'ps';
+                    return x;
+                }))
+            );
+
+            function card(title, value) {
+                return '<div class="stat-card"><div class="stat-card-accent" style="background: #d4af37"></div><div class="stat-card-content"><div style="font-size:14px;color:#c9d1d9">' + title + '</div><div style="font-size:28px;color:#d4af37;font-weight:bold">' + (typeof value === 'number' ? value.toLocaleString() : value) + '</div></div></div>';
+            }
+
+            const html = card('💰 إجمالي الإيراد', total) +
+                card('🎱 إيراد البلياردو', revenueB) +
+                card('🎮 إيراد البلايستيشن', revenueP) +
+                card('⚡ متوسط الجلسة (بلياردو)', avgB) +
+                card('⚡ متوسط الجلسة (بلايستيشن)', avgP) +
+                card('⭐ أكثر طاولة/جهاز نشاطاً', top);
+            const cont = document.getElementById('analytics-cards');
+            if (cont) cont.innerHTML = html;
+        }
+
+        function closeAnalytics() {
+            document.getElementById('analytics-modal').style.display = 'none';
+        }
+    </script>
+
+    <!-- Firebase Realtime Listener Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getDatabase, ref, onChildAdded, get } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC9Y_FW-ULjOD5F7U-WBV7aBMNvEyKAhfg",
+            authDomain: "billiard-system.firebaseapp.com",
+            databaseURL: "https://billiard-system-default-rtdb.firebaseio.com/",
+            projectId: "billiard-system",
+            storageBucket: "billiard-system.appspot.com",
+            messagingSenderId: "152994650455",
+            appId: "1:152994650455:web:1a68b2cd713b11a9cc612"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // حفظ المفاتيح المعالجة
+        const PROCESSED_KEY = 'firebase_processed_all_tables_v1';
+        function getProcessed() {
+            try {
+                return new Set(JSON.parse(localStorage.getItem(PROCESSED_KEY) || '[]'));
+            } catch {
+                return new Set();
+            }
+        }
+
+        function addProcessed(key) {
+            const set = getProcessed();
+            set.add(key);
+            const arr = Array.from(set).slice(-1000);
+            localStorage.setItem(PROCESSED_KEY, JSON.stringify(arr));
+        }
+
+        // الإشعار الأحمر
+        function showRedToast(title, body) {
+            const t = document.createElement('div');
+            t.className = 'firebase-toast-red';
+            t.innerHTML = `
+                <div class="toast-title">${title}</div>
+                <div class="toast-body">${body}</div>
+            `;
+            document.body.appendChild(t);
+            requestAnimationFrame(() => t.classList.add('show'));
+            setTimeout(() => {
+                t.classList.remove('show');
+                setTimeout(() => t.remove(), 400);
+            }, 6000);
+        }
+
+        // صوت التنبيه
+        function playBeep() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioCtx();
+                const now = ctx.currentTime;
+
+                function tone(freq, start, dur, vol = 0.3) {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = "square";
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0, now + start);
+                    gain.gain.linearRampToValueAtTime(vol, now + start + 0.01);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + start + dur);
+                    osc.connect(gain).connect(ctx.destination);
+                    osc.start(now + start);
+                    osc.stop(now + start + dur + 0.05);
+                }
+
+                tone(880, 0, 0.2, 0.4);
+                tone(1100, 0.25, 0.25, 0.35);
+            } catch (e) {
+                console.warn('Beep failed:', e);
+            }
+        }
+
+        // النطق العربي
+        function speak(text) {
+            if (!('speechSynthesis' in window)) return;
+            try {
+                const u = new SpeechSynthesisUtterance(text);
+                const voices = speechSynthesis.getVoices();
+                const ar = voices.find(v => /^ar/i.test(v.lang));
+                if (ar) u.voice = ar;
+                u.lang = ar?.lang || 'ar-IQ';
+                u.rate = 1.0;
+                u.pitch = 1.0;
+                speechSynthesis.cancel();
+                speechSynthesis.speak(u);
+            } catch (e) {
+                console.warn('TTS failed:', e);
+            }
+        }
+
+        // إضافة اللاعب للنظام + التحديث التلقائي
+        function addPlayerToSystem(payload, tableId) {
+            const gameType = (payload.gameType || '').toLowerCase();
+            /*
+             * Determine the mode (billiard vs ps) for auto‑registered players.  The
+             * original logic attempted to infer PlayStation sessions from the
+             * `gameType` string alone (checking for the substrings "ps" or
+             * "play").  However our registration form may send Arabic names
+             * (e.g. "بيلياردو" or "بلايستيشن") or omitted/alternative values,
+             * causing PlayStation sessions to be misclassified as billiards.  To
+             * make the logic robust we now fall back to the table identifier to
+             * determine the section: any tableId that begins with "ps" is
+             * treated as PlayStation.  This means that registrations for
+             * devices labelled ps1/ps2/ps3/ps4 are always routed to the
+             * PlayStation section even if the gameType string is missing or
+             * localized.
+             */
+            // Check gameType for PlayStation keywords (both English and Arabic).
+            const hasPlayKeyword = /ps|play|بلاي|بلايستيشن/i.test(gameType);
+            // Determine mode from tableId prefix if gameType is not conclusive.
+            const modeFromTable = (tableId || '').toLowerCase().startsWith('ps') ? 'ps' : 'billiard';
+            const mode = hasPlayKeyword ? 'ps' : modeFromTable;
+            const name = payload.playerName || payload.name || 'لاعب';
+            const table = tableId || payload.tableId || '1';
+            const count = Number(payload.count || payload.gamesCount || 1);
+            const minutes = Number(payload.minutes || (count * 10));
+            const rate = Number(payload.pricePerGame || payload.total || (APP_DATA[mode]?.hourlyRate || (mode === 'ps' ? 7000 : 5000)));
+
+            // إنشاء كائن اللاعب
+            // Use ratePerGame to record the price per kim, gamesCount for number of kims,
+            // and customRate to store the total cost (ratePerGame * gamesCount).
+            const player = {
+                id: Date.now(),
+                name: name,
+                tableNumber: table,
+                startTime: Date.now(),
+                ratePerGame: rate,
+                gamesCount: count,
+                customRate: rate * count,
+                notes: `تسجيل تلقائي عبر Firebase • ${payload.mode === 'double' ? 'زوجي' : 'مفرد'} • ${count} كيم`,
+                remaining: Math.max(0, minutes) * 60,
+                initialMinutes: Math.max(1, minutes),
+                overtimeAlerted: false,
+                timeFinishedAlerted: false
+            };
+
+            // التأكد من وجود البيانات
+            if (!APP_DATA[mode]) {
+                APP_DATA[mode] = {
+                    activePlayers: [],
+                    completedSessions: [],
+                    hourlyRate: mode === 'ps' ? 7000 : 5000
+                };
+            }
+            if (!APP_DATA[mode].activePlayers) {
+                APP_DATA[mode].activePlayers = [];
+            }
+
+            // إضافة اللاعب للقائمة
+            APP_DATA[mode].activePlayers.push(player);
+            console.log(`✅ تم إضافة اللاعب: ${name} للقسم: ${mode}`);
+
+            // حفظ البيانات
+            if (typeof saveData === 'function') {
+                saveData();
+                console.log('💾 تم حفظ البيانات');
+            }
+
+            // إضافة إشعار داخلي
+            const deviceLabel = mode === 'ps' ? 'الجهاز' : 'الطاولة';
+            if (typeof addNotification === 'function') {
+                addNotification(
+                    '✅ تسجيل تلقائي ناجح',
+                    `${name} على ${deviceLabel} ${table} (${minutes} دقيقة)`,
+                    'success'
+                );
+            }
+
+            // ✅ التحديث الفوري للواجهة
+            setTimeout(() => {
+                // 1. تشغيل العداد التنازلي
+                if (typeof startCountdown === 'function') {
+                    startCountdown(player);
+                    console.log('⏰ تم تشغيل العداد التنازلي');
+                }
+
+                // 2. تحديث الواجهة إذا كنت في نفس القسم
+                if (typeof window.currentMode !== 'undefined' && 
+                    typeof window.showActivePlayers === 'function') {
+                    
+                    if (window.currentMode === mode) {
+                        const sectionView = document.getElementById('section-view');
+                        
+                        // إذا كنت في أي صفحة داخل القسم
+                        if (sectionView && !sectionView.classList.contains('hidden')) {
+                            console.log('🔄 جاري تحديث واجهة اللاعبين النشطين...');
+                            window.showActivePlayers();
+                        }
+                    }
+                }
+            }, 200);
+        }
+
+        // الاستماع على جميع الطاولات
+        const allTables = ['b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'ps1', 'ps2', 'ps3', 'ps4'];
+
+        async function attachTableListener(tableId) {
+            const tableRegsRef = ref(db, `registrations/${tableId}`);
+
+            try {
+                const snap = await get(tableRegsRef);
+                if (snap.exists()) {
+                    snap.forEach(child => addProcessed(`${tableId}_${child.key}`));
+                }
+
+                onChildAdded(tableRegsRef, (childSnap) => {
+                    const key = childSnap.key;
+                    const fullKey = `${tableId}_${key}`;
+
+                    if (getProcessed().has(fullKey)) {
+                        console.log(`⏭️ تم معالجة هذا التسجيل مسبقاً: ${fullKey}`);
+                        return;
+                    }
+                    addProcessed(fullKey);
+
+                    const data = childSnap.val() || {};
+                    const name = data.playerName || data.name || 'لاعب';
+                    const gameType = data.gameType === 'ps' ? 'بلايستيشن' : 'بليارد';
+                    const mode = data.mode === 'double' ? 'زوجي' : 'مفرد';
+                    const count = data.count || 1;
+                    const minutes = data.minutes || (count * 10);
+
+                    console.log('🔔 تسجيل جديد من Firebase:', {
+                        name,
+                        tableId,
+                        gameType,
+                        mode,
+                        count,
+                        minutes
+                    });
+
+                    // 1. إشعار أحمر
+                    showRedToast(
+                        '🔔 تسجيل لاعب جديد',
+                        `${name} • ${tableId.toUpperCase()} • ${gameType} ${mode} • ${count} كيم (${minutes} د)`
+                    );
+
+                    // 2. صوت تنبيه
+                    playBeep();
+
+                    // 3. نطق عربي
+                    speak(`تم تسجيل لاعب جديد ${name} على ${tableId} لعبة ${gameType} ${mode}`);
+
+                    // 4. ✅ إضافة اللاعب للنظام (الأهم!)
+                    addPlayerToSystem(data, tableId);
+                });
+
+                console.log(`✅ مستمع Firebase مفعّل على: ${tableId}`);
+            } catch (e) {
+                console.error(`❌ فشل تفعيل المستمع على ${tableId}:`, e);
+            }
+        }
+
+        allTables.forEach(tableId => attachTableListener(tableId));
+        console.log('✅ نظام الاستماع التلقائي مفعّل على جميع الطاولات');
+    </script>
+
+<script>
+// إصلاح: تعريف window.APP_DATA
+if (typeof APP_DATA !== 'undefined') window.APP_DATA = APP_DATA;
+</script>
+</body>
+</html>
